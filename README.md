@@ -2,6 +2,12 @@
 
 Czarno-czerwony motyw dla **Pterodactyla 1.15.1**. Działa na istniejącym panelu: konta, logowanie, konsola, pliki i sterowanie serwerami nadal są obsługiwane przez Pterodactyla.
 
+## Wersja 1.1.0 — trzy karty serwerów
+
+Na komputerze lista ma trzy karty w jednym rzędzie, na tablecie dwie, a na telefonie jedną. Układ jest inspirowany zaakceptowaną grafiką. Każda karta zachowuje prawdziwą nazwę, opis, adres, wskaźnik statusu oraz odczyty CPU, RAM i dysku z Pterodactyla. Kolejne serwery przechodzą do następnego rzędu; lista nie jest ograniczona do trzech.
+
+Kliknięcie karty otwiera standardowy widok tego serwera. Konsola osadzona pod trzema kartami na ekranie głównym nie jest częścią tej aktualizacji. Nie są dodawane fikcyjne serwery, statystyki ani ilustracyjne paski zużycia.
+
 ## Co zawiera
 
 - Branding NPΩ, ciemne tło, czerwone akcenty i nowe karty serwerów.

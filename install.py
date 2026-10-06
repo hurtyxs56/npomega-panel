@@ -14,7 +14,7 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 ROOT = Path(__file__).resolve().parent
 TEMPLATES = {
     'resources/views/templates/wrapper.blade.php': '855f4aebfee7b4853d4603916e5eb549dcd77cbaf1a63e6d3b4eaa04d8f8f692',
@@ -23,9 +23,9 @@ TEMPLATES = {
 ASSETS = ('npomega.css', 'npomega.js', 'logo.svg')
 STATE = 'storage/app/npomega-theme.json'
 HOOK = '''    <!-- NPOMEGA BEGIN -->
-        <link rel="stylesheet" href="/npomega/npomega.css?v=1.0.0">
+        <link rel="stylesheet" href="/npomega/npomega.css?v=1.1.0">
         <link rel="icon" type="image/svg+xml" href="/npomega/logo.svg">
-        <script src="/npomega/npomega.js?v=1.0.0"></script>
+        <script src="/npomega/npomega.js?v=1.1.0"></script>
     <!-- NPOMEGA END -->
 '''
 

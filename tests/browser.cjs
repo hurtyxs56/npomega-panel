@@ -52,6 +52,18 @@ const server = http.createServer((req,res)=>{
         await page.locator('[data-tab="'+view+'"]').click();
         assert(await page.locator('#'+view).isVisible());
         assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Horizontal overflow '+view+' '+size.width);
+        if(view==='servers') {
+          const cards=await page.locator('.server-grid>a').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width};}));
+          assert.equal(cards.length,3);
+          if(size.width>1000) {
+            assert.equal(cards[0].y,cards[1].y);
+            assert.equal(cards[1].y,cards[2].y);
+            assert(cards[0].x<cards[1].x && cards[1].x<cards[2].x);
+          } else {
+            assert.equal(cards[0].x,cards[1].x);
+            assert(cards[0].y<cards[1].y && cards[1].y<cards[2].y);
+          }
+        }
         if(process.env.NPOMEGA_SCREENSHOTS){
           fs.mkdirSync(process.env.NPOMEGA_SCREENSHOTS,{recursive:true});
           await page.screenshot({path:path.join(process.env.NPOMEGA_SCREENSHOTS,view+'-'+size.width+'.png'),fullPage:true});
