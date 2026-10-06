@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '..');
 const shell = `<!doctype html><html><head><meta charset="utf-8"><script>window.SiteConfiguration={name:'Old',recaptcha:{enabled:true}}</script><script src="/npomega/npomega.js"></script><link rel="stylesheet" href="/npomega/npomega.css"></head><body>
 <div class="bg-neutral-900"><div><div id="logo"><a href="/">NPΩ Panel</a></div></div></div>
 <div id="sub"><div><a href="/server/sample">Console</a><a href="/server/sample/files">Files</a><a href="/server/sample/backups">Backups</a></div></div>
-<p id="user-name">Files</p><pre id="console">Password Console Files</pre>
+<p id="user-name" data-np-user>Files</p><pre id="console">Password Console Files</pre>
 <div id="auth"><h2>Login to Continue</h2><form><div><img src="/assets/svgs/pterodactyl.svg"><div><label for="username">Username or Email</label><input id="username" value="Password"><label for="password">Password</label><input id="password" type="password" value="KeepThis"><button type="submit">Login</button><a href="/auth/password">Forgot password?</a></div></div></form></div>
 <script>document.querySelector('form').addEventListener('submit',e=>{e.preventDefault();window.submitted=true})</script></body></html>`;
 const server = http.createServer((req,res)=>{
@@ -48,26 +48,20 @@ const server = http.createServer((req,res)=>{
     for(const size of [{width:1440,height:1000},{width:390,height:844}]){
       await page.setViewportSize(size);
       await page.goto(origin+'/preview/index.html');
-      for(const view of ['servers','console','login']){
-        await page.locator('[data-tab="'+view+'"]').click();
-        assert(await page.locator('#'+view).isVisible());
-        assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Horizontal overflow '+view+' '+size.width);
-        if(view==='servers') {
-          const cards=await page.locator('.server-grid>a').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width};}));
-          assert.equal(cards.length,3);
-          if(size.width>1000) {
-            assert.equal(cards[0].y,cards[1].y);
-            assert.equal(cards[1].y,cards[2].y);
-            assert(cards[0].x<cards[1].x && cards[1].x<cards[2].x);
-          } else {
-            assert.equal(cards[0].x,cards[1].x);
-            assert(cards[0].y<cards[1].y && cards[1].y<cards[2].y);
-          }
-        }
-        if(process.env.NPOMEGA_SCREENSHOTS){
-          fs.mkdirSync(process.env.NPOMEGA_SCREENSHOTS,{recursive:true});
-          await page.screenshot({path:path.join(process.env.NPOMEGA_SCREENSHOTS,view+'-'+size.width+'.png'),fullPage:true});
-        }
+      assert.equal(await page.locator('.np-live-card').count(),3);
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Horizontal overflow '+size.width);
+      const cards=await page.locator('.np-live-card').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y};}));
+      if(size.width>1000) {
+        assert.equal(cards[0].y,cards[2].y);
+        assert(cards[0].x<cards[1].x && cards[1].x<cards[2].x);
+      } else {
+        assert.equal(cards[0].x,cards[2].x);
+        assert(cards[0].y<cards[1].y && cards[1].y<cards[2].y);
+      }
+      assert.equal(await page.locator('button:disabled').count(),3);
+      if(process.env.NPOMEGA_SCREENSHOTS){
+        fs.mkdirSync(process.env.NPOMEGA_SCREENSHOTS,{recursive:true});
+        await page.screenshot({path:path.join(process.env.NPOMEGA_SCREENSHOTS,'console-'+size.width+'.png'),fullPage:true});
       }
     }
     assert.deepEqual(errors,[]);

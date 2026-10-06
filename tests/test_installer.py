@@ -57,6 +57,20 @@ class InstallerTest(unittest.TestCase):
         self.assertFalse((self.panel / installer.STATE).exists())
         self.assertFalse((self.panel / 'public/npomega').exists())
 
+    def test_upgrade_from_previous_asset_version(self):
+        with tempfile.TemporaryDirectory() as old:
+            old_root = Path(old)
+            (old_root / 'assets').mkdir()
+            for asset in installer.ASSETS:
+                (old_root / 'assets' / asset).write_text('previous version ' + asset)
+            with patch.object(installer, 'ROOT', old_root), patch.object(installer, 'VERSION', '1.1.0'), patch.object(installer, 'HOOK', installer.HOOK.replace('1.2.0', '1.1.0')):
+                installer.install(self.panel)
+            installer.uninstall(self.panel)
+            self.assert_originals()
+            installer.install(self.panel)
+            for asset in installer.ASSETS:
+                self.assertEqual((self.panel / 'public/npomega' / asset).read_bytes(), (ROOT / 'assets' / asset).read_bytes())
+
     def test_reinstall_is_rejected_without_changes(self):
         installer.install(self.panel)
         installed = {name: (self.panel / name).read_bytes() for name in self.originals}

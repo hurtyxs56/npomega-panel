@@ -2,29 +2,29 @@
 
 Czarno-czerwony motyw dla **Pterodactyla 1.15.1**. Działa na istniejącym panelu: konta, logowanie, konsola, pliki i sterowanie serwerami nadal są obsługiwane przez Pterodactyla.
 
-## Wersja 1.1.0 — trzy karty serwerów
+## Wersja 1.2.0 — karty nad konsolą
 
-Na komputerze lista ma trzy karty w jednym rzędzie, na tablecie dwie, a na telefonie jedną. Układ jest inspirowany zaakceptowaną grafiką. Każda karta zachowuje prawdziwą nazwę, opis, adres, wskaźnik statusu oraz odczyty CPU, RAM i dysku z Pterodactyla. Kolejne serwery przechodzą do następnego rzędu; lista nie jest ograniczona do trzech.
+Po otwarciu panelu wybierany jest pierwszy dostępny serwer. Nad jego oryginalną konsolą są maksymalnie trzy karty prawdziwych serwerów, z nazwą, adresem, statusem i odczytami CPU/RAM. Bieżący serwer pozostaje widoczny na kartach. Link **Wszystkie serwery** otwiera pełną, stronicowaną listę wraz z istniejącymi filtrami.
 
-Kliknięcie karty otwiera standardowy widok tego serwera. Konsola osadzona pod trzema kartami na ekranie głównym nie jest częścią tej aktualizacji. Nie są dodawane fikcyjne serwery, statystyki ani ilustracyjne paski zużycia.
+Na komputerze konsola zajmuje lewą część ekranu, wykresy prawą, a przyciski zasilania znajdują się pod konsolą. Dodatkowe zasoby są niżej. Telefon otrzymuje układ jednokolumnowy. Karty pobierają dane przez istniejącą sesję użytkownika co 30 sekund; przy błędzie pokazują brak odczytu. Panel nie tworzy przykładowych serwerów.
 
 ## Co zawiera
 
-- Branding NPΩ, ciemne tło, czerwone akcenty i nowe karty serwerów.
-- Wygląd logowania, nawigacji oraz administracji.
-- Polskie podpisy nawigacji klienta, menu administracji i podstawowego formularza logowania. **To częściowe tłumaczenie**, nie pełna polonizacja: komunikaty błędów, opisy i pozostałe formularze mogą być angielskie.
-- Instalację bez Node.js, Yarn i przebudowy frontendu.
-- Sprawdzenie zgodności szablonów, automatyczną kopię i polecenie cofania zmian.
+- Ciemne kafle, większe nagłówki, czerwone akcenty i wyróżnienie wybranego serwera.
+- Oryginalną konsolę, wykresy i przyciski Pterodactyla z zachowaniem uprawnień.
+- Rozszerzone polskie tłumaczenie menu, formularzy, opisów, przycisków i administracji: słownik `translations/pl.tsv`, kompilowany przez `python3 scripts/build_translation.py`.
+- Tłumaczenie znanych tekstów w przeglądarce. Nie obejmuje dowolnych komunikatów backendu, tekstu rysowanego wewnątrz wykresów ani rozszerzeń. Logi, kod, wartości pól i nazwy użytkownika nie są tłumaczone.
+- Instalację bez Node.js, Yarn i przebudowy frontendu, kopię szablonów i cofanie zmian.
 
 ## Podgląd
 
-Otwórz `preview/index.html` w przeglądarce po pobraniu całego repozytorium. Widoki **Moje serwery**, **Konsola** i **Logowanie** zawierają wyłącznie dane przykładowe. Podgląd pokazuje kierunek wizualny; nie jest uruchomioną instalacją Pterodactyla. Elementy konsoli i układ podglądu nie zastępują oryginalnych komponentów w prawdziwym panelu.
+Otwórz `preview/index.html` po pobraniu całego repozytorium. To statyczny podgląd nowego układu z trzema kartami nad konsolą, przykładowymi danymi i wyłączonymi kontrolkami. Nie łączy się z VPS-em. Prawdziwe wykresy i kontrolki pochodzą z Pterodactyla i mogą różnić się detalami.
 
 ## Instalacja na VPS-ie
 
 Wymagania: Linux, Python **3.9+**, PHP CLI i działający Pterodactyl **1.15.1** w `/var/www/pterodactyl`. Przy innej lokalizacji dopisz `--panel /twoja/sciezka` do polecenia.
 
-Repozytorium jest prywatne. Pobierz je na komputerze z GitHuba przez **Code → Download ZIP**, rozpakuj i prześlij folder na VPS, np. do `/root/npomega-panel`. Alternatywnie użyj `git clone` z już skonfigurowanym dostępem SSH do GitHuba. Nie wpisuj tokenów GitHub w publiczne komendy ani w wiadomości.
+Jeżeli repozytorium jest prywatne, pobranie wymaga dostępu do GitHuba. Pobierz je na komputerze z GitHuba przez **Code → Download ZIP**, rozpakuj i prześlij folder na VPS, np. do `/root/npomega-panel`. Alternatywnie użyj `git clone` z już skonfigurowanym dostępem SSH do GitHuba. Nie wpisuj tokenów GitHub w publiczne komendy ani w wiadomości.
 
 Sprawdzenie bez zmian:
 
@@ -50,7 +50,14 @@ sudo python3 /root/npomega-panel/install.py uninstall
 
 Przywraca dokładne kopie dwóch szablonów i usuwa trzy pliki NPΩ. Odmawia cofnięcia, jeśli pliki zmieniono od czasu instalacji, aby nie zgubić późniejszej pracy. Kopie zostają w `storage/app/npomega-backup-*`; manifest jest w `storage/app/npomega-theme.json`. Instalator nie tworzy kopii bazy, bo jej nie zmienia.
 
-Aktualizacja motywu: cofnij starą wersję, pobierz nowy kod, ponownie zainstaluj. Przed aktualizacją samego Pterodactyla cofnij motyw. Inne wersje panelu wymagają ponownej weryfikacji zgodności.
+Aktualizacja instalacji pobranej przez Git (w folderze repozytorium):
+
+```bash
+git pull --ff-only
+sudo python3 install.py uninstall && sudo python3 install.py install
+```
+
+Odśwież stronę przez Ctrl+F5. Przy pobraniu ZIP najpierw cofnij motyw, potem rozpakuj nową wersję i zainstaluj ją ponownie. Przed aktualizacją samego Pterodactyla cofnij motyw. Inne wersje panelu wymagają ponownej weryfikacji zgodności.
 
 ## Weryfikacja
 
@@ -63,7 +70,7 @@ Testy instalatora sprawdzają zgodność z oryginalnymi szablonami, instalację/
 
 Plik `tests/browser.cjs` uruchamia lokalny test przeglądarkowy, jeśli dostępny jest Playwright z Chromium (`node tests/browser.cjs`). Sprawdza podgląd w dwóch rozmiarach, skrypt nawigacji/logowania i pozostawienie danych użytkownika oraz konsoli bez zmian.
 
-Weryfikacja pierwszej wersji: **10 testów instalatora zakończonych powodzeniem** oraz poprawna składnia JavaScript. Test przeglądarkowy został przygotowany, ale nie uruchomił się w środowisku budowania z powodu braku Chromium i nieudanego pobrania przeglądarki. Pełny wygląd i zachowanie na komputerze oraz telefonie wymagają sprawdzenia na panelu testowym.
+Weryfikacja wersji 1.2.0: **11 testów instalatora zakończonych powodzeniem**, w tym aktualizacja z poprzedniego zestawu zasobów oraz poprawna składnia JavaScript. Test przeglądarkowy został przygotowany, ale nie uruchomił się w środowisku budowania z powodu braku Chromium i nieudanego pobrania przeglądarki. Pełny wygląd i zachowanie na komputerze oraz telefonie wymagają sprawdzenia na panelu testowym.
 
 Pierwsza wersja nie została sprawdzona na produkcyjnym VPS-ie. Po instalacji sprawdź logowanie, konsolę i przejście do plików. Motyw wymaga współczesnej przeglądarki z obsługą CSS `:has()`.
 
