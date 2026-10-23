@@ -831,7 +831,6 @@
         try { const current = await request('/api/client/servers/'+encodeURIComponent(state.id),state); if(current.attributes)servers.unshift(current.attributes); } catch(error) { if(error.name==='AbortError')throw error; }
       }
       const chosen = servers.find(selected);
-      servers = servers.slice(0,3);
       if(chosen && !servers.includes(chosen))servers[servers.length ? servers.length-1 : 0]=chosen;
       if(state.abort.signal.aborted)return;
       const container = state.element.querySelector('.np-live-cards');
