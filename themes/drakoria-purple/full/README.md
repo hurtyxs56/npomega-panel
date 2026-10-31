@@ -2,7 +2,10 @@
 
 Prawdziwe pliki GUI: CSS, JavaScript, SVG, instalator, aktualizator, cofanie i statyczny podgląd. To nakładka na oryginalny frontend Pterodactyl, dlatego przyciski sterowania, pliki, konsola i inne operacje pozostają obsługiwane przez panel oraz jego uprawnienia.
 
-## Nowości 2.1.0
+## Nowości 2.3.0
+- Naprawiono niebieski błysk (FOUC) na telefonie: ciemne CSS od początku dokumentu i ciemny kolor paska mobilnej przeglądarki.
+- Aktualizator potwierdza zgodność JS/CSS z repo i wersję odnośników 2.3.0.
+
 - Branding **EUFORIE** (zamiast Drakoria).
 - Zlikwidowany zdublowany górny pasek nawigacji po załadowaniu panelu.
 - Menu boczne z prawdziwymi linkami do sekcji serwera.
@@ -37,3 +40,6 @@ Pliki w `full/v2/` wykorzystują natywną komendę `p:theme:apply` i dotyczą wy
 Ścieżka folderu w repozytorium nadal zawiera historyczne `drakoria-purple`, aby stare linki i komendy instalacyjne nie przestały działać. To nie jest nazwa widoczna w GUI.
 
 **Ograniczenia:** wygląd w przeglądarce zależy od używanej wersji Pterodactyla i ewentualnych innych modyfikacji. Aktualizator nie był uruchamiany na Twoim produkcyjnym VPS; przed wdrożeniem warto wykonać snapshot VPS lub kopię całego panelu. Pokazowy HTML nie pobiera danych serwera.
+
+## Uwaga na cache
+Po wykonaniu `aktualizuj.sh` odśwież panel; na telefonie, jeżeli interfejs jest nadal stary, usuń cache *witryny panelu* (nie danych serwera). Poprawkę potwierdzają komunikat `SUKCES: EUFORIE 2.3.0` oraz znacznik `EUFORIE_PRELOAD_BEGIN` w `resources/views/templates/wrapper.blade.php`.
