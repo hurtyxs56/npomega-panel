@@ -1,4 +1,4 @@
-/* EUFORIE Purple 3.1.0 — stabilne CSS bez blokowania interakcji.
+/* EUFORIE Purple 3.2.0 — stabilne CSS bez blokowania interakcji.
    Brak fullscreen overlay, fixed sidebar, display:none dla nawigacji,
    transformowania aplikacji i modyfikacji pointer-events. */
 :root {
@@ -265,4 +265,22 @@ body.euforie-ready .euforie-emergency{
 body.euforie-ready #app [data-euforie-native-header="yes"]{display:none!important}
 body.euforie-ready.euforie-native-open #app [data-euforie-native-header="yes"]{
   display:block!important;
+}
+
+
+/* EUFORIE 3.2 — ukrywaj CALE paski, nie tylko ich linki.
+   Dopiero po udanym wlaczeniu bocznego menu. Przycisk awaryjny odslania oryginal. */
+body.euforie-ready:not(.euforie-native-open) #app div.bg-neutral-900:has(#logo) {
+  display:none!important;
+}
+body.euforie-ready:not(.euforie-native-open) #app div:has(> div > a[href^="/server/"][href$="/files"]) {
+  display:none!important;
+}
+body.euforie-ready:not(.euforie-native-open) #app div:has(> div > a[href="/account/api"]) {
+  display:none!important;
+}
+/* Dla wersji, w ktorych navigacja jest ostylowana przez styled-components. */
+body.euforie-ready:not(.euforie-native-open) #app [data-euforie-native-subnav="yes"],
+body.euforie-ready:not(.euforie-native-open) #app [data-euforie-native-header="yes"]{
+  display:none!important;
 }
