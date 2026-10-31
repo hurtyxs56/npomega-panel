@@ -114,7 +114,7 @@
     var candidate = logo;
     for (var i = 0; i < 5 && candidate && candidate !== app; i++, candidate = candidate.parentElement) {
       if (candidate.querySelector('a[href="/account"]') &&
-          candidate.querySelector('a[href="/"]')) return candidate;
+          candidate.querySelector('a[href="/"]')) return candidate.closest('div.bg-neutral-900') || candidate;
     }
     // The logo may exist before the account action is mounted; do not hide.
     return null;
@@ -210,6 +210,14 @@
           a.href = target;
           a.classList.toggle('active',path === target || (item[1] && path.indexOf(target + '/') === 0));
         });
+        // Preserve the server's original administrator edit control.
+        if (nativeSubnav) {
+          var editLink = nativeSubnav.querySelector('a[href^="/admin/servers/view/"]');
+          if (editLink) {
+            var edit = add('a','euforie-link','♜  Edytuj serwer (admin)',serverList);
+            edit.href = editLink.getAttribute('href');
+          }
+        }
       }
     }
     // Keep the server's original navigation available unless we have working
