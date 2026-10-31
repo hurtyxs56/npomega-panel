@@ -1,61 +1,30 @@
-# EUFORIE — aktualizacja awaryjna 2.4.0
+# EUFORIE Purple 3.1 — naprawione boczne menu Pterodactyl PL
 
-**Priorytet: przywrócenie klikania.** Wersja 2.4 usuwa niestabilny JavaScript, który dodawał boczne menu, ukrywał nawigację i obserwował zmiany DOM. Przywrócone są natywne, działające menu i zakładki Pterodactyla. Motyw zachowuje czarno-fioletowe CSS i napis EUFORIE. Górny pasek jest tymczasowo widoczny, bo zawiera oryginalne działające przyciski.
+Ten motyw zachowuje wygląd EUFORIE (czarno-fioletowy + boczna nawigacja) oraz korzysta z oryginalnych mechanizmów Pterodactyla. Nie zawiera pełnoekranowej nakładki, nie przenosi węzłów React i nie przechwytuje poleceń start/stop. Wyszukiwarka otwiera oryginalne okno Pterodactyla, a przycisk wylogowania wywołuje oryginalną akcję. Dostęp administratora jest wyświetlany tylko wtedy, gdy panel udostępnia go użytkownikowi.
 
-**Aktualizacja na VPS z działającym Pterodactyle 1.x:**
-
+## Jedna komenda naprawy lub aktualizacji na VPS z panelem WWW
 ```bash
-sudo bash themes/drakoria-purple/full/v1/aktualizuj.sh /var/www/pterodactyl
+sudo bash -c 'set -e; D=$(mktemp -d); git clone --depth 1 https://github.com/hurtyxs56/npomega-panel.git "$D/repo"; bash "$D/repo/themes/drakoria-purple/full/v1/aktualizuj.sh" /var/www/pterodactyl'
 ```
 
-Skrypt tworzy backup, weryfikuje podmienione zasoby i ustawia wersję `?v=2.4.0` dla przeglądarki. Po aktualizacji wykonaj pełne przeładowanie i, jeśli potrzeba, wyczyść cache witryny. W przeglądarce w konsoli JavaScript powinno być `[EUFORIE] Stabilny motyw 2.4.0`.
+Skrypt działa zarówno po wcześniejszym zainstalowaniu EUFORIE, jak i po uruchomieniu skryptu `ratunek.sh` (gdy odłączono szablony, ale pozostały pliki). Najpierw zapisuje kopię obu szablonów i zasobów, aktualizuje podpięcie w Blade, czyści cache widoków i porównuje skopiowane pliki z repo. Nie aktualizuje Pterodactyla, nie zmienia bazy danych i nie restartuje Wings ani Minecrafta. W razie błędu skrypt przywraca szablony i zasoby z kopii.
 
-Poniższy opis wersji 2.1–2.3 jest historyczny i **nie** opisuje układu 2.4.0.
-
----
-
-# EUFORIE Purple — polski motyw Pterodactyl 1.x
-
-Prawdziwe pliki GUI: CSS, JavaScript, SVG, instalator, aktualizator, cofanie i statyczny podgląd. To nakładka na oryginalny frontend Pterodactyl, dlatego przyciski sterowania, pliki, konsola i inne operacje pozostają obsługiwane przez panel oraz jego uprawnienia.
-
-## Nowości 2.3.0
-- Naprawiono niebieski błysk (FOUC) na telefonie: ciemne CSS od początku dokumentu i ciemny kolor paska mobilnej przeglądarki.
-- Aktualizator potwierdza zgodność JS/CSS z repo i wersję odnośników 2.3.0.
-
-- Branding **EUFORIE** (zamiast Drakoria).
-- Zlikwidowany zdublowany górny pasek nawigacji po załadowaniu panelu.
-- Menu boczne z prawdziwymi linkami do sekcji serwera.
-- Dostęp do wyszukiwarki, konta, administracji i wylogowania w menu bocznym.
-- Zmodernizowane ciemno-fioletowe tło konsoli, kart, przycisków i listy plików.
-- Automatyczna kopia poprzednich zasobów podczas aktualizacji.
-- Oryginalna nawigacja nie jest ukrywana, jeśli nowy interfejs nie załadował się poprawnie.
-
-## Aktualizacja istniejącej instalacji
-W katalogu repozytorium:
-
+## Pierwsza instalacja
 ```bash
-sudo bash themes/drakoria-purple/full/v1/aktualizuj.sh /var/www/pterodactyl
+sudo bash themes/drakoria-purple/full/v1/instaluj.sh /var/www/pterodactyl
 ```
+Przed instalacją warto sprawdzić, czy nie działa inny motyw Pterodactyla. Nie należy łączyć go z dawnym NPΩ.
 
-Przy aktualizacji kopie plików trafiają do `storage/app/euforie-purple-updates/`. Zasoby są podmieniane w katalogu `public/purple-ptero/`, a wersja odnośników CSS/JS jest zwiększana, żeby nie pozostały w pamięci podręcznej przeglądarki. W razie błędu podczas podmiany skrypt próbuje przywrócić kopię. Nie dotyka Wings ani plików serwerów gier.
+## Kontrolki na lewym pasku
+Panel główny; konsola; pliki; bazy danych; harmonogram; użytkownicy; kopie zapasowe; sieć; uruchamianie; ustawienia; aktywność; konto; klucze API/SSH; wyszukiwanie; wylogowanie; administracja (dla administratorów). Dostępne sekcje serwera są pobierane z oryginalnej nawigacji z uwzględnieniem uprawnień.
 
-## Pierwsza instalacja Pterodactyl 1.x
+Górny pasek jest ukrywany **dopiero po wykryciu działających oryginalnych przycisków wyszukiwania i wylogowania**. W razie problemu można go przywrócić klikając `Przywróć pasek awaryjnie` na lewym pasku. To zabezpieczenie, nie drugi stały pasek.
+
+## Cofnięcie GUI
 ```bash
-sudo bash themes/drakoria-purple/instaluj.sh /var/www/pterodactyl
+sudo bash themes/drakoria-purple/ratunek.sh /var/www/pterodactyl
 ```
-Instalator weryfikuje obecność odpowiednich szablonów i tworzy kopie Blade w `storage/app/drakoria-purple-backup/`. Nie wymusza konkretnej wersji 1.15.1. Gdy włączony jest poprzedni motyw NPΩ, zatrzyma instalację, żeby nie nadpisać cudzych modyfikacji.
+Wyłącza motyw z szablonów bez ruszania gier. Nie usuwaj backupów `storage/app/euforie-safe-updates/`.
 
-## Cofanie
-```bash
-sudo bash themes/drakoria-purple/full/v1/odinstaluj.sh /var/www/pterodactyl
-```
-
-## Wariant 2.x
-Pliki w `full/v2/` wykorzystują natywną komendę `p:theme:apply` i dotyczą wyłącznie paneli oferujących ten mechanizm; są osobnym, uproszczonym wariantem kolorystycznym.
-
-Ścieżka folderu w repozytorium nadal zawiera historyczne `drakoria-purple`, aby stare linki i komendy instalacyjne nie przestały działać. To nie jest nazwa widoczna w GUI.
-
-**Ograniczenia:** wygląd w przeglądarce zależy od używanej wersji Pterodactyla i ewentualnych innych modyfikacji. Aktualizator nie był uruchamiany na Twoim produkcyjnym VPS; przed wdrożeniem warto wykonać snapshot VPS lub kopię całego panelu. Pokazowy HTML nie pobiera danych serwera.
-
-## Uwaga na cache
-Po wykonaniu `aktualizuj.sh` odśwież panel; na telefonie, jeżeli interfejs jest nadal stary, usuń cache *witryny panelu* (nie danych serwera). Poprawkę potwierdzają komunikat `SUKCES: EUFORIE 2.3.0` oraz znacznik `EUFORIE_PRELOAD_BEGIN` w `resources/views/templates/wrapper.blade.php`.
+## Ważne
+Wersja 3.1 została sprawdzona pod kątem składni JavaScript i obecności bezpiecznych ścieżek do oryginalnych kontrolek, ale nie była przetestowana w Twojej konkretnej instalacji Mathost ani w przeglądarce produkcyjnego panelu. Gdyby po aktualizacji problem pozostał, prześlij błąd z konsoli przeglądarki i wynik instalatora. Nie wykonuj kolejnych instalacji w ciemno.
