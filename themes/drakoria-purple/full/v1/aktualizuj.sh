@@ -66,7 +66,8 @@ critical='''<!-- EUFORIE_PRELOAD_BEGIN -->
     background:#6e25be!important;
   }
 </style>
-<!-- EUFORIE_PRELOAD_END -->'''
+<!-- EUFORIE_PRELOAD_END -->
+<script>(function(){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#080712')})()</script>'''
 for path in (wrapper,Path(sys.argv[2])):
     data=path.read_text(encoding='utf8')
     if 'DRAKORIA_PURPLE_HEAD_BEGIN' not in data or 'DRAKORIA_PURPLE_BODY_BEGIN' not in data:
