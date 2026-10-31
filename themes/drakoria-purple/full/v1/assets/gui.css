@@ -1,186 +1,105 @@
-/* EUFORIE Purple PL - Pterodactyl v1.x */
-:root{--dp-bg:#080712;--dp-side:#0d0a1b;--dp-card:#121025;--dp-line:#33234e;--dp-accent:#a43cff;--dp-light:#bd75ff;--dp-text:#f3edff;--dp-muted:#aca0ca;--dp-side-width:260px}
-html{color-scheme:dark}
-body.dp-enabled{background:radial-gradient(ellipse at 80% 0,rgba(121,32,196,.20),transparent 42%),linear-gradient(160deg,#080712,#0c081b 65%,#100820)!important;color:var(--dp-text)!important;min-height:100vh;font-family:Inter,'Segoe UI',system-ui,sans-serif!important;overflow-x:hidden}
-body.dp-enabled::before{content:"";position:fixed;bottom:0;left:var(--dp-side-width);right:0;height:330px;background:url('/purple-ptero/dragon-landscape.svg') center bottom/cover no-repeat;opacity:.16;pointer-events:none;z-index:0}
-body.dp-enabled #app{position:relative;z-index:1;margin-left:var(--dp-side-width);width:calc(100% - var(--dp-side-width));min-height:100vh}
-body.dp-enabled #app [class*="max-w-"]{max-width:1650px!important}
-body.dp-enabled #app [class*="bg-neutral-900"],body.dp-enabled #app [class*="bg-gray-900"],body.dp-enabled #app [class*="bg-neutral-800"]{background-color:#120f24!important}
-body.dp-enabled #app [class*="bg-neutral-700"],body.dp-enabled #app [class*="bg-gray-700"]{background-color:#211936!important}
-body.dp-enabled #app [class*="border-neutral-"],body.dp-enabled #app [class*="border-gray-"]{border-color:var(--dp-line)!important}
-body.dp-enabled #app [class*="bg-cyan-"],body.dp-enabled #app [class*="bg-blue-"]{background-color:#7523d9!important}
-body.dp-enabled #app [class*="text-cyan-"],body.dp-enabled #app [class*="text-blue-"]{color:var(--dp-light)!important}
-body.dp-enabled #app h1,body.dp-enabled #app h2,body.dp-enabled #app h3{color:#f7f1ff!important;letter-spacing:-.02em}
-body.dp-enabled #app a:hover{color:#cf96ff}
-body.dp-enabled #app input:not([type=checkbox]),body.dp-enabled #app textarea,body.dp-enabled #app select{background:#0d0a1b;border-color:#3a2857;color:#f6f0ff;border-radius:10px}
-body.dp-enabled #app button{border-radius:10px;transition:filter .15s ease}
-body.dp-enabled #app button:not(:disabled):hover{filter:brightness(1.12)}
-body.dp-enabled #app :is(button,input,textarea,a):focus-visible,.dp-nav-link:focus-visible{outline:2px solid #d9a8ff;outline-offset:3px}
-.dp-sidebar{box-sizing:border-box;position:fixed;z-index:80;top:0;left:0;bottom:0;width:var(--dp-side-width);display:flex;flex-direction:column;overflow:auto;padding:19px 12px 20px;background:linear-gradient(165deg,#120a2a,#090813 50%,#160924);border-right:1px solid #34214f;box-shadow:8px 0 45px #0005;scrollbar-width:thin;scrollbar-color:#512a76 transparent}
-.dp-brand{display:flex;align-items:center;gap:11px;padding:5px 9px 24px;color:#f4ebff;text-decoration:none;font-size:19px;font-weight:800;letter-spacing:.03em;border-bottom:1px solid #35204f}
-.dp-brand img{height:38px;width:38px;filter:drop-shadow(0 0 14px #ad57ff77)}
-.dp-brand small{display:block;color:#987ab4;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;margin-top:4px}
-.dp-group{margin-top:23px}.dp-label{display:block;padding:0 14px 10px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#947baa;font-weight:800}
-.dp-nav-link{display:flex;align-items:center;gap:12px;margin:4px 0;padding:11px 13px;border-radius:11px;border:1px solid transparent;text-decoration:none!important;color:#c1b5d9;font-size:13px;font-weight:600;transition:background .18s,color .18s}
-.dp-nav-link:hover{background:#261741;color:#fff}.dp-nav-link.active{color:#fff;border-color:#743cac;background:linear-gradient(100deg,#6119a690,#2b1644);box-shadow:inset 3px 0 #b35aff}
-.dp-nav-link svg{width:18px;height:18px;flex:none;stroke:#b88cf5}
-.dp-sidebar-bottom{margin-top:auto;padding:18px 10px 2px;color:#8978a9;font-size:11px;line-height:1.7}.dp-sidebar-bottom span{display:block;color:#b57af2;font-weight:700}
-.dp-mobile-toggle{display:none;position:fixed;top:13px;left:14px;z-index:101;padding:10px 12px;color:#f5eaff;background:#321850;border:1px solid #70429e;border-radius:9px;cursor:pointer}.dp-overlay{display:none}
-body.dp-enabled #app [class*="bg-red-"]{background:#8320ca!important}
-body.dp-enabled ::selection{background:#7533af;color:#fff}
-@media(max-width:1023px){body.dp-enabled #app{margin-left:0;width:100%}body.dp-enabled:before{left:0}body.dp-enabled .dp-sidebar{transform:translateX(-110%);transition:transform .22s;z-index:110}body.dp-enabled.dp-menu-open .dp-sidebar{transform:translateX(0)}.dp-mobile-toggle{display:block}.dp-overlay{display:block;position:fixed;inset:0;z-index:105;background:#000b;opacity:0;pointer-events:none;transition:opacity .22s}body.dp-menu-open .dp-overlay{opacity:1;pointer-events:auto}body.dp-enabled #logo{margin-left:48px}}
-@media(prefers-reduced-motion:reduce){.dp-sidebar,.dp-overlay,.dp-nav-link{transition:none!important}}
-
-/* EUFORIE 2.1 — bez zdublowanego paska, grafitowo-fioletowe karty. */
-/* Ukrywamy oryginalna nawigacje dopiero po utworzeniu dostepnego menu bocznego. */
-body.dp-enabled.dp-chrome-ready #app [data-dp-native-header="1"],
-body.dp-enabled.dp-chrome-ready #app [data-dp-native-subnav="1"] {
-  display:none!important;
+/* EUFORIE Purple 2.4.0 — stabilne CSS bez blokowania interakcji.
+   Brak fullscreen overlay, fixed sidebar, display:none dla nawigacji,
+   transformowania aplikacji i modyfikacji pointer-events. */
+:root {
+  --euforie-bg: #080712;
+  --euforie-surface: #151022;
+  --euforie-surface2: #211731;
+  --euforie-accent: #a43cff;
+  --euforie-hover: #bc72ff;
+  --euforie-border: #3a2856;
+  --euforie-text: #f4edff;
 }
-body.dp-enabled.dp-chrome-ready.dp-search-open #app [data-dp-native-header="1"]{
-  display:block!important;position:fixed!important;left:calc(var(--dp-side-width) + 34px);
-  top:18px;width:min(720px,calc(100vw - var(--dp-side-width) - 68px));
-  max-width:unset!important;z-index:200;overflow:visible!important;
-  border:1px solid #7650aa;border-radius:16px;
-  background:#19112d!important;box-shadow:0 20px 90px #000b,0 0 0 100vmax #0009;
+html { color-scheme: dark; background-color: #080712; }
+body:has(#app) {
+  color: var(--euforie-text) !important;
+  background: radial-gradient(ellipse at 85% 4%,#24113f 0%,transparent 45%),#080712!important;
+  min-height:100vh;
+  font-family: Inter,"Segoe UI",system-ui,sans-serif!important;
 }
-body.dp-enabled.dp-search-open [data-dp-native-header="1"] #logo{display:none!important}
-body.dp-enabled.dp-search-open [data-dp-native-header="1"] > div{
-  max-width:unset!important;padding:0 15px!important
+body:has(#app) #app {
+  background:transparent;
+  color:var(--euforie-text);
 }
-body.dp-enabled:not(.dp-search-open) .dp-sidebar,
-body.dp-enabled:not(.dp-search-open) .dp-mobile-toggle{z-index:90}
-body:not(.dp-enabled) .dp-sidebar,
-body:not(.dp-enabled) .dp-mobile-toggle,
-body:not(.dp-enabled) .dp-overlay{display:none!important}
-body.dp-enabled #app { padding-bottom:32px; }
-body.dp-enabled #app > div{min-height:100vh}
-body.dp-enabled #app [class*="max-w-"][class*="mx-auto"]{
-  padding-left:24px!important;padding-right:24px!important;
-  max-width:1680px!important;
+/* Zachowujemy natywne menu: wszystkie odnośniki React działają normalnie. */
+body:has(#app) #logo a {
+  font-size:0!important;
+  color:#f5edff!important;
+  text-decoration:none!important;
 }
-/* Naglowki, kafelki i zakladki */
-body.dp-enabled #app [class*="bg-neutral-700"]{
-  background:linear-gradient(145deg,#201833,#181128)!important;
-  border:1px solid #44305f!important;
-  border-radius:12px!important;
-  box-shadow:0 5px 18px #02000842;
+body:has(#app) #logo a::after {
+  content:"EUFORIE";
+  display:inline;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:.075em;
+  color:#f1e5ff;
+  text-shadow:0 0 16px #982dfe7a;
 }
-body.dp-enabled #app [class*="bg-neutral-800"],
-body.dp-enabled #app [class*="bg-neutral-900"]{
-  background-color:#100d20!important;
+body:has(#app) [class*="bg-neutral-900"],
+body:has(#app) [class*="bg-gray-900"] {
+  background:#100c1d!important;
 }
-body.dp-enabled #app [class*="rounded"][class*="shadow"]{
-  box-shadow:0 5px 20px #04000d55!important;
+body:has(#app) [class*="bg-neutral-800"],
+body:has(#app) [class*="bg-gray-800"] {
+  background:#161125!important;
 }
-body.dp-enabled #app [class*="text-neutral-400"],
-body.dp-enabled #app [class*="text-neutral-500"]{color:#b6a8c9!important}
-body.dp-enabled #app [class*="text-neutral-100"],
-body.dp-enabled #app [class*="text-neutral-200"]{color:#f5efff!important}
-/* Akcje zwykle fioletowe, destrukcyjne pozostaja czerwone dla czytelnosci */
-body.dp-enabled #app button[class*="bg-blue-"],
-body.dp-enabled #app button[class*="bg-cyan-"]{
-  background:linear-gradient(110deg,#8736ed,#5b20b6)!important;
-  color:#fff!important;border:1px solid #9c5cef!important;
-  box-shadow:0 3px 14px #6e32d244;
+body:has(#app) [class*="bg-neutral-700"],
+body:has(#app) [class*="bg-gray-700"] {
+  background:#251a39!important;
 }
-body.dp-enabled #app button[class*="bg-neutral-"],
-body.dp-enabled #app [class*="bg-neutral-700"] button{
-  border:1px solid #4d3969!important;
+body:has(#app) [class*="border-neutral-"],
+body:has(#app) [class*="border-gray-"] {
+  border-color:#3e2b5c!important;
 }
-body.dp-enabled #app button[class*="bg-red-"]{background:#b4233c!important}
-body.dp-enabled #app input:not([type=checkbox]):focus,
-body.dp-enabled #app textarea:focus{outline:none!important;box-shadow:0 0 0 2px #9b58ef88!important}
-/* Konsola/terminal: wysoki kontrast i cienka obwodka */
-body.dp-enabled #app .xterm,
-body.dp-enabled #app .xterm-screen,
-body.dp-enabled #app .xterm-viewport{
-  background:#080b13!important;
+body:has(#app) [class*="bg-cyan-"],
+body:has(#app) [class*="bg-blue-"] {
+  background-color:#702bc7!important;
 }
-body.dp-enabled #app .xterm{
-  border:1px solid #39244f;border-radius:12px;overflow:hidden;
-  box-shadow:0 12px 26px #0006;
+body:has(#app) [class*="text-cyan-"],
+body:has(#app) [class*="text-blue-"] {
+  color:#cc96ff!important;
 }
-/* Tabela plikow: przejrzyste wiersze */
-body.dp-enabled #app [class*="bg-neutral-700"] a:hover,
-body.dp-enabled #app [class*="bg-neutral-700"]:hover{
-  border-color:#7551a0!important;
+body:has(#app) [class*="text-neutral-400"],
+body:has(#app) [class*="text-neutral-500"]{
+  color:#b8aaca!important;
 }
-body.dp-enabled .dp-sidebar{
-  background:linear-gradient(165deg,#170d30 0%,#0b0916 53%,#13091f 100%)!important;
-  border-right-color:#452466;
+body:has(#app) [class*="text-neutral-100"],
+body:has(#app) [class*="text-neutral-200"]{
+  color:#f5eaff!important;
 }
-body.dp-enabled .dp-brand{
-  font-size:21px;letter-spacing:.08em;text-shadow:0 0 24px #8738fa55;
+body:has(#app) h1,body:has(#app) h2,body:has(#app) h3{
+  color:#f5eaff!important;
+  letter-spacing:-.015em;
 }
-body.dp-enabled .dp-sidebar-bottom{
-  margin-top:auto;border-top:1px solid #3c235b;padding-top:14px;
+body:has(#app) a:hover{ color:#deafff; }
+body:has(#app) :is(button,input,a,select,textarea):focus-visible{
+  outline:2px solid #d4a7ff;
+  outline-offset:2px;
 }
-.dp-utility-action{
-  box-sizing:border-box;width:100%;display:flex;gap:12px;align-items:center;
-  margin:4px 0;padding:11px 13px;color:#cdbce6;background:transparent;
-  font:600 13px Inter,'Segoe UI',sans-serif;text-decoration:none!important;
-  border:1px solid transparent;border-radius:11px;cursor:pointer;text-align:left;
+body:has(#app) input:not([type="checkbox"]),
+body:has(#app) textarea,
+body:has(#app) select{
+  border-color:#52366f!important;
+  color:#f3eafd;
 }
-.dp-utility-action:hover{color:white;background:#281842;border-color:#493064}
-.dp-utility-action:focus-visible{outline:2px solid #c48fff;outline-offset:2px}
-.dp-utility-action[hidden]{display:none!important}
-.dp-utility .dp-label{margin-top:4px}
-@media(max-width:1023px){
- body.dp-enabled #app [class*="max-w-"][class*="mx-auto"]{padding-left:12px!important;padding-right:12px!important}
- body.dp-enabled.dp-chrome-ready.dp-search-open #app [data-dp-native-header="1"]{
-    left:12px;top:12px;width:calc(100vw - 24px)
- }
- body.dp-enabled.dp-menu-open .dp-mobile-toggle{display:none}
+body:has(#app) button:not(:disabled):hover{
+  filter:brightness(1.08);
 }
-
-
-/* EUFORIE 2.2.0 — native headers truly hidden after sidebar activates */
-body.dp-enabled #app .dp-native-hidden{display:none!important}
-body.dp-enabled.dp-search-open #app [data-dp-native-header="1"].dp-native-hidden{
- display:block!important;
+body:has(#app) button[class*="bg-red-"] {
+  background:#ac314f!important;
 }
-body.dp-enabled #app [data-dp-native-subnav="1"].dp-native-hidden{
- display:none!important;
+body:has(#app) .xterm,body:has(#app) .xterm-viewport{
+  background-color:#090b14!important;
 }
-/* Proportions close to the concept: wide content, subtle neon corners */
-body.dp-enabled #app {
- background:
-   radial-gradient(ellipse 60% 33% at 92% 4%,rgba(113,43,181,.14),transparent 76%),
-   linear-gradient(145deg,rgba(5,4,12,.65),rgba(11,7,27,.35))!important;
+body:has(#app) .xterm{
+  border:1px solid #332044;
+  border-radius:9px;
 }
-body.dp-enabled #app [class*="bg-neutral-700"] {
- background:linear-gradient(140deg,#1a142d,#171228)!important;
- border:1px solid #3e285a!important;
- color:#ece2ff!important;
+body:has(#app) ::selection{
+  background:#743ac2;color:white;
 }
-body.dp-enabled #app [class*="bg-neutral-800"]{
- background-color:#161126!important;
- border-color:#422e5d!important;
-}
-body.dp-enabled #app [class*="bg-neutral-900"]{
- background-color:#0e0b1c!important;
- border-color:#332247!important;
-}
-body.dp-enabled #app :is([class*="bg-cyan-"],[class*="bg-blue-"]):not([class*="text-"]){
- background-color:#6e25be!important;
-}
-body.dp-enabled #app [class*="text-cyan-"],
-body.dp-enabled #app [class*="text-blue-"] {color:#d7a1ff!important}
-body.dp-enabled #app .xterm {border:1px solid #432965!important}
-body.dp-enabled #app [class*="bg-neutral-700"] svg{color:#bf8aff}
-body.dp-enabled .dp-brand img{filter:drop-shadow(0 0 12px #a52dffb3)}
-body.dp-enabled .dp-sidebar .dp-nav-link.active{
- background:linear-gradient(95deg,rgba(129,36,213,.42),rgba(75,33,131,.27));
- border-color:#6c349b;box-shadow:inset 3px 0 #be69ff;
-}
-body.dp-enabled .dp-sidebar .dp-nav-link:hover{
- background:#271441;color:white;
-}
-body.dp-enabled .dp-sidebar .dp-nav-link.active svg{stroke:#e1c1ff}
-@media (max-width:1023px){
- body.dp-enabled #app{margin-left:0!important;width:100%!important}
- body.dp-enabled.dp-search-open #app [data-dp-native-header="1"]{
-    left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;
- }
+@media(max-width:640px){
+  body:has(#app) #logo a::after{font-size:18px}
+  body:has(#app) h1{letter-spacing:0}
 }
