@@ -1,4 +1,4 @@
-/* EUFORIE Purple 2.4.0 — stabilne CSS bez blokowania interakcji.
+/* EUFORIE Purple 3.0.0 — stabilne CSS bez blokowania interakcji.
    Brak fullscreen overlay, fixed sidebar, display:none dla nawigacji,
    transformowania aplikacji i modyfikacji pointer-events. */
 :root {
@@ -102,4 +102,154 @@ body:has(#app) ::selection{
 @media(max-width:640px){
   body:has(#app) #logo a::after{font-size:18px}
   body:has(#app) h1{letter-spacing:0}
+}
+
+
+/* EUFORIE 3.0: boczna nawigacja bez pelnoekranowych nakladek. */
+:root{--euforie-sidebar-width:246px}
+body.euforie-ready{
+  background:
+   radial-gradient(ellipse 70% 38% at 88% 0%,rgba(118,33,220,.19),transparent 70%),
+   linear-gradient(150deg,#080712,#11091f 58%,#090711)!important;
+}
+body.euforie-ready #app{
+  margin-left:var(--euforie-sidebar-width)!important;
+  width:calc(100% - var(--euforie-sidebar-width))!important;
+  min-height:100vh;
+  position:relative;
+}
+body.euforie-ready #app [data-euforie-native-header="yes"],
+body.euforie-ready #app [data-euforie-native-subnav="yes"]{
+  display:none!important;
+}
+body.euforie-ready.euforie-native-open #app [data-euforie-native-header="yes"],
+body.euforie-ready.euforie-native-open #app [data-euforie-native-subnav="yes"]{
+  display:block!important;
+}
+body.euforie-ready .euforie-sidebar{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:var(--euforie-sidebar-width);
+  box-sizing:border-box;
+  z-index:60;
+  display:flex;
+  flex-direction:column;
+  padding:23px 13px 18px;
+  overflow-y:auto;
+  background:linear-gradient(165deg,#160b2c,#0b0918 47%,#130b25 100%);
+  border-right:1px solid #49296f;
+  box-shadow:7px 0 35px rgba(0,0,0,.22);
+  scrollbar-width:thin;
+  scrollbar-color:#63418e transparent;
+}
+.euforie-sidebar{display:none}
+.euforie-sidebar a,.euforie-sidebar button{
+  text-decoration:none;
+  cursor:pointer;
+}
+.euforie-brand{
+  display:block;
+  padding:9px 12px 3px;
+  font-size:23px;
+  letter-spacing:.045em;
+  font-weight:900;
+  color:#f0e5ff;
+  text-shadow:0 0 18px #ae58ff80;
+}
+.euforie-brand:hover{color:white}
+.euforie-subtitle{
+  font-size:10px;
+  letter-spacing:.21em;
+  color:#b493d1;
+  padding:0 12px 20px;
+  border-bottom:1px solid #382451;
+  font-weight:700;
+}
+.euforie-section-label{
+  padding:19px 11px 8px;
+  color:#937eb0;
+  font-size:10px;
+  letter-spacing:.16em;
+  font-weight:800;
+}
+.euforie-links{display:flex;flex-direction:column}
+.euforie-link{
+  width:100%;
+  display:block;
+  box-sizing:border-box;
+  color:#d4c5ec;
+  padding:10px 12px;
+  font:600 13px Inter,"Segoe UI",system-ui,sans-serif;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:10px;
+  text-align:left;
+  margin:2px 0;
+  transition:color .12s,background .12s;
+}
+.euforie-link:hover{
+  background:#2d1a49;
+  border-color:#493365;
+  color:white!important;
+}
+.euforie-link.active{
+  color:white;
+  border-color:#7041ac;
+  background:linear-gradient(100deg,#6325ac88,#261439);
+  box-shadow:inset 3px 0 #af54ff;
+}
+.euforie-link[hidden]{display:none!important}
+.euforie-link:focus-visible,
+.euforie-mobile-toggle:focus-visible,
+.euforie-brand:focus-visible{
+  outline:2px solid #d3a3ff;
+  outline-offset:2px;
+}
+.euforie-hint{color:#8d76ae;font-size:12px;padding:10px 12px}
+.euforie-footer{
+  margin-top:auto;
+  padding:17px 12px 1px;
+  border-top:1px solid #392553;
+  font-size:10px;
+  letter-spacing:.05em;
+  color:#ae91c8;
+}
+.euforie-mobile-toggle{
+  display:none;
+  background:#2d1550;
+  border:1px solid #7e49b4;
+  color:#f3e4ff;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+@media (max-width:960px){
+  body.euforie-ready #app{
+    margin-left:0!important;
+    width:100%!important;
+    padding-top:48px;
+  }
+  body.euforie-ready .euforie-mobile-toggle{
+    display:block;
+    position:fixed;
+    z-index:80;
+    top:10px;left:12px;
+  }
+  body.euforie-ready .euforie-sidebar{
+    z-index:78;
+    width:min(275px,83vw);
+    transform:translateX(-105%);
+    visibility:hidden;
+    transition:transform .2s ease,visibility .2s;
+    box-shadow:12px 0 30px #0008;
+  }
+  body.euforie-ready.euforie-menu-open .euforie-sidebar{
+    transform:translateX(0);
+    visibility:visible;
+  }
+  body.euforie-ready.euforie-menu-open .euforie-mobile-toggle{left:min(279px,85vw)}
+}
+@media (prefers-reduced-motion:reduce){
+ .euforie-sidebar,.euforie-link{transition:none!important}
 }
