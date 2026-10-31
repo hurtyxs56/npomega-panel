@@ -13,7 +13,7 @@ done
 if [ -f "$PANEL/storage/app/npomega-theme.json" ]; then
   echo 'BŁĄD: motyw NPΩ nadal aktywny. Nie łączę dwóch motywów.' >&2; exit 1
 fi
-grep -q '3.1.0' "$SRC/assets/gui.js" || { echo 'BŁĄD: stare pliki na GitHubie'; exit 1; }
+grep -q '3.2.0' "$SRC/assets/gui.js" || { echo 'BŁĄD: stare pliki na GitHubie'; exit 1; }
 BACKUP="$PANEL/storage/app/euforie-safe-updates/$(date -u +%Y%m%dT%H%M%SZ)-$$"
 mkdir -p "$BACKUP"
 cp -p "$W" "$BACKUP/wrapper.blade.php"
@@ -35,10 +35,10 @@ from pathlib import Path
 import re,sys
 wrapper,admin=[Path(p) for p in sys.argv[1:]]
 head='''<!-- DRAKORIA_PURPLE_HEAD_BEGIN -->
-<link rel="stylesheet" href="/purple-ptero/gui.css?v=3.1.0">
+<link rel="stylesheet" href="/purple-ptero/gui.css?v=3.2.0">
 <!-- DRAKORIA_PURPLE_HEAD_END -->'''
 body='''<!-- DRAKORIA_PURPLE_BODY_BEGIN -->
-<script src="/purple-ptero/gui.js?v=3.1.0" defer></script>
+<script src="/purple-ptero/gui.js?v=3.2.0" defer></script>
 <!-- DRAKORIA_PURPLE_BODY_END -->'''
 preload='''<!-- EUFORIE_PRELOAD_BEGIN -->
 <style id="euforie-preload">
@@ -77,8 +77,8 @@ chmod -R a+rX "$DEST"
 (cd "$PANEL" && php artisan view:clear)
 cmp -s "$SRC/assets/gui.js" "$DEST/gui.js"
 cmp -s "$SRC/assets/gui.css" "$DEST/gui.css"
-grep -q 'gui.css?v=3.1.0' "$W"
-grep -q 'gui.js?v=3.1.0' "$W"
+grep -q 'gui.css?v=3.2.0' "$W"
+grep -q 'gui.js?v=3.2.0' "$W"
 trap - ERR
-echo 'SUKCES: EUFORIE 3.1.0. Boczny panel i oryginalne kliknięcia Pterodactyla.'
+echo 'SUKCES: EUFORIE 3.2.0. Boczny panel i oryginalne kliknięcia Pterodactyla.'
 echo "Backup: $BACKUP"
