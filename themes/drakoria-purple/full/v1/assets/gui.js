@@ -13,31 +13,57 @@ for(const [title,links] of sections){const group=document.createElement('div');g
 const utility=document.createElement('div');utility.className='dp-group dp-utility';utility.innerHTML='<span class="dp-label">KONTO I NARZĘDZIA</span><button type="button" class="dp-utility-action dp-search-trigger">⌕ <span>Wyszukaj serwer</span></button><a class="dp-utility-action" href="/account">⚙ <span>Moje konto</span></a><a class="dp-utility-action dp-admin-link" href="/admin" hidden>♜ <span>Administracja</span></a><button type="button" class="dp-utility-action dp-logout-trigger">↪ <span>Wyloguj</span></button>';aside.append(utility);
 utility.querySelector('.dp-search-trigger').addEventListener('click',()=>{document.body.classList.toggle('dp-search-open');const input=document.querySelector('[data-dp-native-header] input');if(document.body.classList.contains('dp-search-open')&&input)input.focus()});
 utility.querySelector('.dp-logout-trigger').addEventListener('click',()=>{const buttons=document.querySelectorAll('[data-dp-native-header] button');const original=buttons[buttons.length-1];if(original)original.click();else window.alert('Nie znaleziono przycisku wylogowania.')});
-const footer=document.createElement('div');footer.className='dp-sidebar-bottom';footer.innerHTML='<span>EUFORIE • PURPLE</span>Pterodactyl · Polski GUI';aside.append(footer);document.body.prepend(aside);
+const footer=document.createElement('div');footer.className='dp-sidebar-bottom';footer.innerHTML='<span>EUFORIE • PURPLE 2.2</span>Pterodactyl · Polski GUI';aside.append(footer);document.body.prepend(aside);
 const toggle=document.createElement('button');toggle.className='dp-mobile-toggle';toggle.setAttribute('aria-label','Otwórz menu');toggle.textContent='☰';toggle.onclick=()=>document.body.classList.toggle('dp-menu-open');document.body.append(toggle);const overlay=document.createElement('div');overlay.className='dp-overlay';overlay.onclick=close;document.body.append(overlay)}
 function nav(){if(location.pathname.startsWith('/admin')||location.pathname.startsWith('/auth')){document.body.classList.remove('dp-enabled','dp-chrome-ready','dp-search-open');return}document.body.classList.add('dp-enabled');if(!aside)make();const id=current();for(const a of aside.querySelectorAll('.dp-nav-link')){const suffix=a.dataset.suffix,isHome=suffix==='/';a.href=isHome?'/':id?'/server/'+encodeURIComponent(id)+suffix:'/';a.classList.toggle('active',isHome?!id:(!!id&&location.pathname==='/server/'+id+suffix));a.style.opacity=(!id&&!isHome)?'.4':'';}}
 function translate(){const app=document.getElementById('app');if(!app)return;const w=document.createTreeWalker(app,NodeFilter.SHOW_TEXT);let node,count=0;while((node=w.nextNode())&&count++<1700){const el=node.parentElement;if(!el||el.closest('pre,code,kbd,samp,textarea,input,[contenteditable],.xterm,.monaco-editor,[role=log]'))continue;const value=node.nodeValue.trim();if(tr[value])node.nodeValue=node.nodeValue.replace(value,tr[value])}
 for(const el of app.querySelectorAll('input[placeholder],textarea[placeholder]')){const value=el.getAttribute('placeholder');if(tr[value])el.setAttribute('placeholder',tr[value])}}
 function chrome(){
-const app=document.getElementById('app');if(!app)return;
-const logo=app.querySelector('#logo');const header=logo&&logo.closest('div.bg-neutral-900');
-if(header)header.dataset.dpNativeHeader='1';
-const id=current();
-if(id){
- const serverNavLinks=Array.from(app.querySelectorAll('a[href]')).filter(a=>{
-  try{return /^\/server\/[^/]+\/(files|databases|schedules|users|backups|network|startup|settings|activity)$/.test(new URL(a.href,location.origin).pathname)}
-  catch{return false}
- });
- for(const link of serverNavLinks){
-  const inner=link.parentElement,wrap=inner&&inner.parentElement;
-  if(inner&&wrap&&inner.querySelectorAll('a[href]').length>=3&&wrap!==app)wrap.dataset.dpNativeSubnav='1'
+ const app=document.getElementById('app');if(!app||!aside)return;
+ const client=/^\/(?!admin(?:\/|$)|auth(?:\/|$))/.test(location.pathname);
+ const logo=app.querySelector('#logo');
+ let header=logo&&logo.closest('div[class*="bg-neutral-900"]');
+ if(!header&&logo){let p=logo;for(let i=0;i<5&&p;i++,p=p.parentElement){
+   if(p.querySelector('a[href="/account"]')&&p.querySelector('a[href="/"]')){header=p;break}
+ }}
+ if(header)header.setAttribute('data-dp-native-header','1');
+ // The Pterodactyl 1.x server submenu is a styled-component and does not
+ // have a reliable Tailwind class. Identify it by actual server-route links.
+ let subnav=null;const id=current();
+ if(id){
+  const serverPrefix='/server/'+id+'/';
+  const candidates=Array.from(app.querySelectorAll('a[href]')).filter(a=>{
+   let p;try{p=new URL(a.getAttribute('href'),location.origin).pathname}catch{return false}
+   return p.startsWith(serverPrefix)&&['files','databases','schedules','users','backups','network','startup','settings','activity'].includes(p.slice(serverPrefix.length).split('/')[0])
+  });
+  if(candidates.length>=3){
+   let p=candidates[0].parentElement;
+   for(let i=0;i<4&&p;i++,p=p.parentElement){
+    if(p===app||p.contains(logo))break;
+    if(candidates.filter(a=>p.contains(a)).length>=3){
+      const anchorCount=p.querySelectorAll('a[href]').length;
+      if(anchorCount<=25){subnav=p;break}
+    }
+   }
+   // The link holder itself contains the links. Hide the parent wrapper.
+   if(subnav&&subnav.parentElement!==app&&subnav.parentElement&&
+      subnav.parentElement.querySelectorAll('a[href]').length===subnav.querySelectorAll('a[href]').length)
+      subnav=subnav.parentElement;
+  }
  }
-}
-const admin=aside&&aside.querySelector('.dp-admin-link');
-if(admin)admin.hidden=!(header&&header.querySelector('a[href="/admin"]'));
-document.body.classList.toggle('dp-chrome-ready',!!(aside&&header&&document.body.classList.contains('dp-enabled')));
-if(document.body.classList.contains('dp-enabled'))document.title='EUFORIE — Panel serwerów';
-if(!document.body.classList.contains('dp-enabled'))document.body.classList.remove('dp-search-open');
+ // Some routes (e.g. files) may render after the first animation frame.
+ // In that case the original navigation stays visible until a safe replacement exists.
+ const found=!!(client&&header&&aside.isConnected);
+ if(header)header.classList.toggle('dp-native-hidden',found&&!document.body.classList.contains('dp-search-open'));
+ if(subnav)subnav.classList.toggle('dp-native-hidden',found);
+ for(const n of app.querySelectorAll('[data-dp-native-subnav="1"]')){if(n!==subnav)n.classList.remove('dp-native-hidden')}
+ if(subnav)subnav.dataset.dpNativeSubnav='1';
+ const admin=aside.querySelector('.dp-admin-link');
+ if(admin)admin.hidden=!Boolean(header&&header.querySelector('a[href="/admin"]'));
+ document.body.classList.toggle('dp-chrome-ready',found);
+ document.body.dataset.euforieVersion='2.2.0';
+ if(found)document.title='EUFORIE — Panel serwerów';
+ window.__euforieStatus={version:'2.2.0',active:found,headerFound:!!header,subnavFound:!!subnav,path:location.pathname};
 }
 function sync(){scheduled=false;nav();chrome();translate()}function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(sync)}}
 function init(){if(!document.getElementById('app'))return;make();schedule();new MutationObserver(schedule).observe(document.getElementById('app'),{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['href','placeholder']});window.addEventListener('popstate',schedule);window.addEventListener('pageshow',schedule);document.addEventListener('keydown',e=>{if(e.key==='Escape')document.body.classList.remove('dp-search-open')})}
