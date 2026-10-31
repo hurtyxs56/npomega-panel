@@ -1,4 +1,4 @@
-/* Drakoria Purple PL - Pterodactyl v1.x */
+/* EUFORIE Purple PL - Pterodactyl v1.x */
 :root{--dp-bg:#080712;--dp-side:#0d0a1b;--dp-card:#121025;--dp-line:#33234e;--dp-accent:#a43cff;--dp-light:#bd75ff;--dp-text:#f3edff;--dp-muted:#aca0ca;--dp-side-width:260px}
 html{color-scheme:dark}
 body.dp-enabled{background:radial-gradient(ellipse at 80% 0,rgba(121,32,196,.20),transparent 42%),linear-gradient(160deg,#080712,#0c081b 65%,#100820)!important;color:var(--dp-text)!important;min-height:100vh;font-family:Inter,'Segoe UI',system-ui,sans-serif!important;overflow-x:hidden}
@@ -30,3 +30,106 @@ body.dp-enabled #app [class*="bg-red-"]{background:#8320ca!important}
 body.dp-enabled ::selection{background:#7533af;color:#fff}
 @media(max-width:1023px){body.dp-enabled #app{margin-left:0;width:100%}body.dp-enabled:before{left:0}body.dp-enabled .dp-sidebar{transform:translateX(-110%);transition:transform .22s;z-index:110}body.dp-enabled.dp-menu-open .dp-sidebar{transform:translateX(0)}.dp-mobile-toggle{display:block}.dp-overlay{display:block;position:fixed;inset:0;z-index:105;background:#000b;opacity:0;pointer-events:none;transition:opacity .22s}body.dp-menu-open .dp-overlay{opacity:1;pointer-events:auto}body.dp-enabled #logo{margin-left:48px}}
 @media(prefers-reduced-motion:reduce){.dp-sidebar,.dp-overlay,.dp-nav-link{transition:none!important}}
+
+/* EUFORIE 2.1 — bez zdublowanego paska, grafitowo-fioletowe karty. */
+/* Ukrywamy oryginalna nawigacje dopiero po utworzeniu dostepnego menu bocznego. */
+body.dp-enabled.dp-chrome-ready #app [data-dp-native-header="1"],
+body.dp-enabled.dp-chrome-ready #app [data-dp-native-subnav="1"] {
+  display:none!important;
+}
+body.dp-enabled.dp-chrome-ready.dp-search-open #app [data-dp-native-header="1"]{
+  display:block!important;position:fixed!important;left:calc(var(--dp-side-width) + 34px);
+  top:18px;width:min(720px,calc(100vw - var(--dp-side-width) - 68px));
+  max-width:unset!important;z-index:200;overflow:visible!important;
+  border:1px solid #7650aa;border-radius:16px;
+  background:#19112d!important;box-shadow:0 20px 90px #000b,0 0 0 100vmax #0009;
+}
+body.dp-enabled.dp-search-open [data-dp-native-header="1"] #logo{display:none!important}
+body.dp-enabled.dp-search-open [data-dp-native-header="1"] > div{
+  max-width:unset!important;padding:0 15px!important
+}
+body.dp-enabled:not(.dp-search-open) .dp-sidebar,
+body.dp-enabled:not(.dp-search-open) .dp-mobile-toggle{z-index:90}
+body:not(.dp-enabled) .dp-sidebar,
+body:not(.dp-enabled) .dp-mobile-toggle,
+body:not(.dp-enabled) .dp-overlay{display:none!important}
+body.dp-enabled #app { padding-bottom:32px; }
+body.dp-enabled #app > div{min-height:100vh}
+body.dp-enabled #app [class*="max-w-"][class*="mx-auto"]{
+  padding-left:24px!important;padding-right:24px!important;
+  max-width:1680px!important;
+}
+/* Naglowki, kafelki i zakladki */
+body.dp-enabled #app [class*="bg-neutral-700"]{
+  background:linear-gradient(145deg,#201833,#181128)!important;
+  border:1px solid #44305f!important;
+  border-radius:12px!important;
+  box-shadow:0 5px 18px #02000842;
+}
+body.dp-enabled #app [class*="bg-neutral-800"],
+body.dp-enabled #app [class*="bg-neutral-900"]{
+  background-color:#100d20!important;
+}
+body.dp-enabled #app [class*="rounded"][class*="shadow"]{
+  box-shadow:0 5px 20px #04000d55!important;
+}
+body.dp-enabled #app [class*="text-neutral-400"],
+body.dp-enabled #app [class*="text-neutral-500"]{color:#b6a8c9!important}
+body.dp-enabled #app [class*="text-neutral-100"],
+body.dp-enabled #app [class*="text-neutral-200"]{color:#f5efff!important}
+/* Akcje zwykle fioletowe, destrukcyjne pozostaja czerwone dla czytelnosci */
+body.dp-enabled #app button[class*="bg-blue-"],
+body.dp-enabled #app button[class*="bg-cyan-"]{
+  background:linear-gradient(110deg,#8736ed,#5b20b6)!important;
+  color:#fff!important;border:1px solid #9c5cef!important;
+  box-shadow:0 3px 14px #6e32d244;
+}
+body.dp-enabled #app button[class*="bg-neutral-"],
+body.dp-enabled #app [class*="bg-neutral-700"] button{
+  border:1px solid #4d3969!important;
+}
+body.dp-enabled #app button[class*="bg-red-"]{background:#b4233c!important}
+body.dp-enabled #app input:not([type=checkbox]):focus,
+body.dp-enabled #app textarea:focus{outline:none!important;box-shadow:0 0 0 2px #9b58ef88!important}
+/* Konsola/terminal: wysoki kontrast i cienka obwodka */
+body.dp-enabled #app .xterm,
+body.dp-enabled #app .xterm-screen,
+body.dp-enabled #app .xterm-viewport{
+  background:#080b13!important;
+}
+body.dp-enabled #app .xterm{
+  border:1px solid #39244f;border-radius:12px;overflow:hidden;
+  box-shadow:0 12px 26px #0006;
+}
+/* Tabela plikow: przejrzyste wiersze */
+body.dp-enabled #app [class*="bg-neutral-700"] a:hover,
+body.dp-enabled #app [class*="bg-neutral-700"]:hover{
+  border-color:#7551a0!important;
+}
+body.dp-enabled .dp-sidebar{
+  background:linear-gradient(165deg,#170d30 0%,#0b0916 53%,#13091f 100%)!important;
+  border-right-color:#452466;
+}
+body.dp-enabled .dp-brand{
+  font-size:21px;letter-spacing:.08em;text-shadow:0 0 24px #8738fa55;
+}
+body.dp-enabled .dp-sidebar-bottom{
+  margin-top:auto;border-top:1px solid #3c235b;padding-top:14px;
+}
+.dp-utility-action{
+  box-sizing:border-box;width:100%;display:flex;gap:12px;align-items:center;
+  margin:4px 0;padding:11px 13px;color:#cdbce6;background:transparent;
+  font:600 13px Inter,'Segoe UI',sans-serif;text-decoration:none!important;
+  border:1px solid transparent;border-radius:11px;cursor:pointer;text-align:left;
+}
+.dp-utility-action:hover{color:white;background:#281842;border-color:#493064}
+.dp-utility-action:focus-visible{outline:2px solid #c48fff;outline-offset:2px}
+.dp-utility-action[hidden]{display:none!important}
+.dp-utility .dp-label{margin-top:4px}
+@media(max-width:1023px){
+ body.dp-enabled #app [class*="max-w-"][class*="mx-auto"]{padding-left:12px!important;padding-right:12px!important}
+ body.dp-enabled.dp-chrome-ready.dp-search-open #app [data-dp-native-header="1"]{
+    left:12px;top:12px;width:calc(100vw - 24px)
+ }
+ body.dp-enabled.dp-menu-open .dp-mobile-toggle{display:none}
+}
