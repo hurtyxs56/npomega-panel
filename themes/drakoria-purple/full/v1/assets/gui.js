@@ -36,6 +36,7 @@ if(id){
 const admin=aside&&aside.querySelector('.dp-admin-link');
 if(admin)admin.hidden=!(header&&header.querySelector('a[href="/admin"]'));
 document.body.classList.toggle('dp-chrome-ready',!!(aside&&header&&document.body.classList.contains('dp-enabled')));
+if(document.body.classList.contains('dp-enabled'))document.title='EUFORIE — Panel serwerów';
 if(!document.body.classList.contains('dp-enabled'))document.body.classList.remove('dp-search-open');
 }
 function sync(){scheduled=false;nav();chrome();translate()}function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(sync)}}
