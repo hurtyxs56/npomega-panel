@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# EUFORIE 2.3.0 — instalacja aktualizacji + kontrola poprawności
+# EUFORIE 2.4.0 — instalacja aktualizacji + kontrola poprawności
 set -Eeuo pipefail
 PANEL="$1"
 SRC="$(cd "$(dirname "$0")" && pwd)"
 W="$PANEL/resources/views/templates/wrapper.blade.php"
 A="$PANEL/resources/views/layouts/admin.blade.php"
 DEST="$PANEL/public/purple-ptero"
-VERSION="2.3.0"
+VERSION="2.4.0"
 if [ "$(id -u)" -ne 0 ]; then echo 'BŁĄD: Uruchom przez sudo/root.' >&2; exit 1; fi
 if [ ! -f "$PANEL/artisan" ] || [ ! -f "$W" ] || [ ! -f "$A" ]; then
  echo "BŁĄD: Nie znaleziono Pterodactyla 1.x w $PANEL" >&2; exit 1
@@ -21,7 +21,7 @@ for t in "$W" "$A"; do
  grep -q 'DRAKORIA_PURPLE_HEAD_BEGIN' "$t" || { echo "BŁĄD: Nie znaleziono znacznika motywu w $t" >&2; exit 1; }
  grep -q 'DRAKORIA_PURPLE_BODY_BEGIN' "$t" || { echo "BŁĄD: Nie znaleziono znacznika JS w $t" >&2; exit 1; }
 done
-grep -q '2.3.0' "$SRC/assets/gui.js" || { echo 'BŁĄD: Pobrano stary kod JS.' >&2; exit 1; }
+grep -q '2.4.0' "$SRC/assets/gui.js" || { echo 'BŁĄD: Pobrano stary kod JS.' >&2; exit 1; }
 BACKUP="$PANEL/storage/app/euforie-purple-updates/$(date -u +%Y%m%dT%H%M%SZ)-$$"
 mkdir -p "$BACKUP"
 cp -p "$W" "$BACKUP/wrapper.blade.php"
@@ -74,7 +74,7 @@ for path in (wrapper,Path(sys.argv[2])):
         raise RuntimeError('Nie znaleziono starego GUI w '+str(path))
     for asset in ('gui.css','gui.js'):
         pat=r'(/purple-ptero/'+re.escape(asset)+r'\?v=)[0-9.]+'
-        data,count=re.subn(pat,lambda m:m.group(1)+'2.3.0',data)
+        data,count=re.subn(pat,lambda m:m.group(1)+'2.4.0',data)
         if count!=1:raise RuntimeError('Nieprawidłowy link do '+asset+' w '+str(path))
     if path==wrapper and 'EUFORIE_PRELOAD_BEGIN' not in data:
         if '</head>' not in data:raise RuntimeError('Brak sekcji head w '+str(path))
@@ -85,8 +85,8 @@ PY
 cmp -s "$SRC/assets/gui.css" "$DEST/gui.css" || { echo 'BŁĄD: CSS na serwerze różni się od GitHub.' >&2; false; }
 cmp -s "$SRC/assets/gui.js" "$DEST/gui.js" || { echo 'BŁĄD: JS na serwerze różni się od GitHub.' >&2; false; }
 grep -q 'EUFORIE_PRELOAD_BEGIN' "$W"
-grep -q 'gui.css?v=2.3.0' "$W"
-grep -q 'gui.js?v=2.3.0' "$W"
+grep -q 'gui.css?v=2.4.0' "$W"
+grep -q 'gui.js?v=2.4.0' "$W"
 trap - ERR
 echo "SUKCES: EUFORIE $VERSION"
 echo "Plik GUI JS: $(sha256sum "$DEST/gui.js" | cut -d' ' -f1)"
