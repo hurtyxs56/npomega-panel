@@ -6,9 +6,8 @@
   'use strict';
   if (window.__euforieV3) return;
   window.__euforieV3 = true;
-  var VERSION = '3.0.0';
-  var app = document.getElementById('app');
-  if (!app) return;
+  var VERSION = '3.1.0';
+  var app = null;
 
   var links = [
     ['Konsola', '', '⌘'],
@@ -65,7 +64,30 @@
     var admin = add('a', 'euforie-link euforie-admin', '♜  Administracja', sidebar);
     admin.href = '/admin';
     admin.hidden = true;
-    var reveal = add('button', 'euforie-link euforie-action', '☷  Oryginalne menu', sidebar);
+    var api = add('a', 'euforie-link', '◈  Klucze API', sidebar);
+    api.href = '/account/api';
+    var ssh = add('a', 'euforie-link', '⌁  Klucze SSH', sidebar);
+    ssh.href = '/account/ssh';
+    var activity = add('a', 'euforie-link', '◷  Aktywność konta', sidebar);
+    activity.href = '/account/activity';
+    var search = add('button', 'euforie-link euforie-action euforie-search', '⌕  Wyszukaj serwer', sidebar);
+    search.type = 'button';
+    search.addEventListener('click', function () {
+      var header = getHeader();
+      var original = header && header.querySelector('.navigation-link');
+      if (original) original.click();
+      else document.body.classList.add('euforie-native-open');
+      closeMobile();
+    });
+    var logout = add('button', 'euforie-link euforie-action euforie-logout', '↪  Wyloguj', sidebar);
+    logout.type = 'button';
+    logout.addEventListener('click', function () {
+      var original = getLogoutButton(getHeader());
+      if (original) original.click();
+      else document.body.classList.add('euforie-native-open');
+      closeMobile();
+    });
+    var reveal = add('button', 'euforie-link euforie-action euforie-emergency', '☷  Przywróć pasek awaryjnie', sidebar);
     reveal.type = 'button';
     reveal.addEventListener('click', function () {
       document.body.classList.toggle('euforie-native-open');
@@ -95,6 +117,25 @@
           candidate.querySelector('a[href="/"]')) return candidate;
     }
     // The logo may exist before the account action is mounted; do not hide.
+    return null;
+  }
+  function getLogoutButton(header) {
+    if (!header) return null;
+    var accountLink = header.querySelector('a[href="/account"]');
+    var nav = accountLink && accountLink.parentElement;
+    if (!nav) return null;
+    return Array.prototype.find.call(nav.children, function (el) {
+      return el.tagName === 'BUTTON';
+    }) || null;
+  }
+  function getAccountNav() {
+    if (!location.pathname.startsWith('/account')) return null;
+    var links = Array.prototype.slice.call(app.querySelectorAll('a[href]')).filter(function (el) {
+      return ['/account/api','/account/ssh','/account/activity'].includes(el.getAttribute('href'));
+    });
+    if (links.length < 2) return null;
+    var parent=links[0].parentElement;
+    if (parent && links.every(function (el) {return parent.contains(el)})) return parent;
     return null;
   }
   function getServerNav(id) {
@@ -128,16 +169,21 @@
     var path = window.location.pathname;
     var home = sidebar.querySelector('.euforie-home');
     if (home) home.classList.toggle('active', path === '/');
+    sidebar.querySelectorAll('a.euforie-link[href^="/account"]').forEach(function (link) {
+      link.classList.toggle('active',path === link.getAttribute('href'));
+    });
     var header = getHeader();
     var oldHeader = app.querySelector('[data-euforie-native-header]');
     if (oldHeader && oldHeader !== header) oldHeader.removeAttribute('data-euforie-native-header');
-    if (header) header.setAttribute('data-euforie-native-header','yes');
+    var canProxy = !!(header && header.querySelector('.navigation-link') && getLogoutButton(header));
+    if (header && canProxy) header.setAttribute('data-euforie-native-header','yes');
+    else if (header) header.removeAttribute('data-euforie-native-header');
 
     var admin = sidebar.querySelector('.euforie-admin');
     // Never offer privileged navigation to users lacking the native admin link.
     if (admin) admin.hidden = !(header && header.querySelector('a[href="/admin"]'));
 
-    var nativeSubnav = getServerNav(id);
+    var nativeSubnav = id ? getServerNav(id) : getAccountNav();
     var prevNav = app.querySelector('[data-euforie-native-subnav]');
     if (prevNav && prevNav !== nativeSubnav) prevNav.removeAttribute('data-euforie-native-subnav');
 
@@ -162,20 +208,23 @@
           if (nativeSubnav && item[1] && !available.has(target)) return;
           var a = add('a','euforie-link', item[2] + '  ' + item[0],serverList);
           a.href = target;
-          a.classList.toggle('active',path === target);
+          a.classList.toggle('active',path === target || (item[1] && path.indexOf(target + '/') === 0));
         });
       }
     }
     // Keep the server's original navigation available unless we have working
     // links rendered in the sidebar. The "Oryginalne menu" button restores it.
-    if (nativeSubnav && id && serverList.querySelector('a[href]')) {
+    if (nativeSubnav && ((id && serverList.querySelector('a[href]')) || path.startsWith('/account'))) {
       nativeSubnav.setAttribute('data-euforie-native-subnav','yes');
     }
+    // A missing native action must never leave users locked out of their panel.
+    if (!canProxy) document.body.classList.add('euforie-native-open');
     document.documentElement.dataset.euforieVersion = VERSION;
     window.__euforieStatus = {
       version: VERSION,
       ready: true,
       originalTopBarDetected: !!header,
+      nativeActionsReady: canProxy,
       originalServerTabsDetected: !!nativeSubnav,
       path: path
     };
@@ -186,7 +235,8 @@
     requestAnimationFrame(refresh);
   }
   function init() {
-    if (!document.getElementById('app')) return;
+    app = document.getElementById('app');
+    if (!app) return;
     build();
     schedule();
     // Observe only React child insertions/removals. Theme changes outside
