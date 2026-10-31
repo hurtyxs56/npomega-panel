@@ -133,3 +133,54 @@ body.dp-enabled .dp-sidebar-bottom{
  }
  body.dp-enabled.dp-menu-open .dp-mobile-toggle{display:none}
 }
+
+
+/* EUFORIE 2.2.0 — native headers truly hidden after sidebar activates */
+body.dp-enabled #app .dp-native-hidden{display:none!important}
+body.dp-enabled.dp-search-open #app [data-dp-native-header="1"].dp-native-hidden{
+ display:block!important;
+}
+body.dp-enabled #app [data-dp-native-subnav="1"].dp-native-hidden{
+ display:none!important;
+}
+/* Proportions close to the concept: wide content, subtle neon corners */
+body.dp-enabled #app {
+ background:
+   radial-gradient(ellipse 60% 33% at 92% 4%,rgba(113,43,181,.14),transparent 76%),
+   linear-gradient(145deg,rgba(5,4,12,.65),rgba(11,7,27,.35))!important;
+}
+body.dp-enabled #app [class*="bg-neutral-700"] {
+ background:linear-gradient(140deg,#1a142d,#171228)!important;
+ border:1px solid #3e285a!important;
+ color:#ece2ff!important;
+}
+body.dp-enabled #app [class*="bg-neutral-800"]{
+ background-color:#161126!important;
+ border-color:#422e5d!important;
+}
+body.dp-enabled #app [class*="bg-neutral-900"]{
+ background-color:#0e0b1c!important;
+ border-color:#332247!important;
+}
+body.dp-enabled #app :is([class*="bg-cyan-"],[class*="bg-blue-"]):not([class*="text-"]){
+ background-color:#6e25be!important;
+}
+body.dp-enabled #app [class*="text-cyan-"],
+body.dp-enabled #app [class*="text-blue-"] {color:#d7a1ff!important}
+body.dp-enabled #app .xterm {border:1px solid #432965!important}
+body.dp-enabled #app [class*="bg-neutral-700"] svg{color:#bf8aff}
+body.dp-enabled .dp-brand img{filter:drop-shadow(0 0 12px #a52dffb3)}
+body.dp-enabled .dp-sidebar .dp-nav-link.active{
+ background:linear-gradient(95deg,rgba(129,36,213,.42),rgba(75,33,131,.27));
+ border-color:#6c349b;box-shadow:inset 3px 0 #be69ff;
+}
+body.dp-enabled .dp-sidebar .dp-nav-link:hover{
+ background:#271441;color:white;
+}
+body.dp-enabled .dp-sidebar .dp-nav-link.active svg{stroke:#e1c1ff}
+@media (max-width:1023px){
+ body.dp-enabled #app{margin-left:0!important;width:100%!important}
+ body.dp-enabled.dp-search-open #app [data-dp-native-header="1"]{
+    left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;
+ }
+}
