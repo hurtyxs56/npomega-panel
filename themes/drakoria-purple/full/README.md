@@ -1,3 +1,19 @@
+# EUFORIE 3.2.0 — całkowite usunięcie obu górnych pasków
+
+W wersji 3.2.0 poprawiono wykrywanie standardowej belki Pterodactyla oraz całego kontenera szarej nawigacji (serwer i konto). Oba paski są ukrywane, kiedy działa lewe menu. Wyszukiwarka i wylogowanie po lewej wywołują natywne akcje Pterodactyla. Na wypadek problemów na lewym pasku jest przycisk **„Przywróć pasek awaryjnie”**. Nie ukrywa on przycisków Start/Stop ani konsoli.
+
+Aktualizacja istniejącego motywu na VPS z panelem WWW:
+
+```bash
+sudo bash -c 'set -e; D=$(mktemp -d); git clone --depth 1 https://github.com/hurtyxs56/npomega-panel.git "$D/repo"; bash "$D/repo/themes/drakoria-purple/full/v1/aktualizuj.sh" /var/www/pterodactyl'
+```
+
+Oczekiwany komunikat: `SUKCES: EUFORIE 3.2.0`. Przed zmianą robiona jest kopia szablonów i zasobów; czyszczony jest cache widoków Laravel. Po instalacji wymuś świeże pobranie strony (Ctrl+Shift+R). W konsoli przeglądarki dostępne są `document.documentElement.dataset.euforieVersion` i `window.__euforieStatus`, które pokazują bieżącą wersję i wykrycie pasków. Jeżeli nie masz lewego menu lub panel źle się zachowuje, użyj `themes/drakoria-purple/ratunek.sh` przed dalszymi próbami.
+
+Nie zmienia baz danych, Wings, konfiguracji ani serwerów gier. Nie testowano produkcyjnej instalacji użytkownika.
+
+---
+
 # EUFORIE Purple 3.1 — naprawione boczne menu Pterodactyl PL
 
 Ten motyw zachowuje wygląd EUFORIE (czarno-fioletowy + boczna nawigacja) oraz korzysta z oryginalnych mechanizmów Pterodactyla. Nie zawiera pełnoekranowej nakładki, nie przenosi węzłów React i nie przechwytuje poleceń start/stop. Wyszukiwarka otwiera oryginalne okno Pterodactyla, a przycisk wylogowania wywołuje oryginalną akcję. Dostęp administratora jest wyświetlany tylko wtedy, gdy panel udostępnia go użytkownikowi.
