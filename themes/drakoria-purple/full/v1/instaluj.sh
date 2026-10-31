@@ -13,4 +13,4 @@ mkdir -p "$PANEL/public/purple-ptero"
 cp -a "$SRC/assets/." "$PANEL/public/purple-ptero/"
 chmod -R a+rX "$PANEL/public/purple-ptero"
 (cd "$PANEL" && php artisan view:clear)
-echo 'Sukces: EUFORIE Purple PL 2.4.0. Odśwież Ctrl+F5.'
+echo 'Sukces: EUFORIE Purple PL 3.1.0. Odśwież Ctrl+F5.'
