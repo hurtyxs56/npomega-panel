@@ -7,8 +7,8 @@ panel=args.panel.resolve()
 files=[panel/'resources/views/templates/wrapper.blade.php',panel/'resources/views/layouts/admin.blade.php']
 if not (panel/'artisan').is_file() or not all(f.is_file() for f in files):sys.exit('BŁĄD: Brakuje wymaganych plików Pterodactyla 1.x.')
 if args.action=='install' and (panel/'storage/app/npomega-theme.json').exists():sys.exit('BŁĄD: Motyw NPΩ już zainstalowany. Najpierw go cofnij.')
-head='<!-- DRAKORIA_PURPLE_HEAD_BEGIN -->\n<link rel="stylesheet" href="/purple-ptero/gui.css?v=2.0.0">\n<!-- DRAKORIA_PURPLE_HEAD_END -->'
-body='<!-- DRAKORIA_PURPLE_BODY_BEGIN -->\n<script src="/purple-ptero/gui.js?v=2.0.0" defer></script>\n<!-- DRAKORIA_PURPLE_BODY_END -->'
+head='<!-- DRAKORIA_PURPLE_HEAD_BEGIN -->\n<link rel="stylesheet" href="/purple-ptero/gui.css?v=2.1.0">\n<!-- DRAKORIA_PURPLE_HEAD_END -->'
+body='<!-- DRAKORIA_PURPLE_BODY_BEGIN -->\n<script src="/purple-ptero/gui.js?v=2.1.0" defer></script>\n<!-- DRAKORIA_PURPLE_BODY_END -->'
 originals={f:f.read_text(encoding='utf8') for f in files};updated={}
 for f,s in originals.items():
  if args.action=='install':
