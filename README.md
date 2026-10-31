@@ -1,4 +1,11 @@
-# NPΩ Panel
+# EUFORIE — czarno-fioletowy GUI Pterodactyl
+
+Nowy motyw **EUFORIE Purple PL** jest w [themes/drakoria-purple/full](themes/drakoria-purple/full). Zachowaliśmy dawną nazwę katalogu dla zgodności starych linków. Aktualizacja już zainstalowanego GUI: `sudo bash themes/drakoria-purple/full/v1/aktualizuj.sh /var/www/pterodactyl`.
+
+---
+
+## Archiwalny motyw NPΩ (czarno-czerwony)
+
 
 Czarno-czerwony motyw dla **Pterodactyla 1.15.1**. Działa na istniejącym panelu: konta, logowanie, konsola, pliki i sterowanie serwerami nadal są obsługiwane przez Pterodactyla.
 
