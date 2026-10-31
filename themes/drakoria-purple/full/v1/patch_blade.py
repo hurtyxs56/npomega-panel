@@ -18,10 +18,10 @@ if args.action == 'install' and (panel / 'storage/app/npomega-theme.json').exist
     sys.exit('BŁĄD: Stary motyw NPΩ jest aktywny. Nie nadpisuję go.')
 
 head = '''<!-- DRAKORIA_PURPLE_HEAD_BEGIN -->
-<link rel="stylesheet" href="/purple-ptero/gui.css?v=2.3.0">
+<link rel="stylesheet" href="/purple-ptero/gui.css?v=2.4.0">
 <!-- DRAKORIA_PURPLE_HEAD_END -->'''
 body = '''<!-- DRAKORIA_PURPLE_BODY_BEGIN -->
-<script src="/purple-ptero/gui.js?v=2.3.0" defer></script>
+<script src="/purple-ptero/gui.js?v=2.4.0" defer></script>
 <!-- DRAKORIA_PURPLE_BODY_END -->'''
 preload = '''<!-- EUFORIE_PRELOAD_BEGIN -->
 <style id="euforie-preload">
