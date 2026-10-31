@@ -6,7 +6,7 @@
   'use strict';
   if (window.__euforieV3) return;
   window.__euforieV3 = true;
-  var VERSION = '3.1.0';
+  var VERSION = '3.2.0';
   var app = null;
 
   var links = [
@@ -76,7 +76,7 @@
       var header = getHeader();
       var original = header && header.querySelector('.navigation-link');
       if (original) original.click();
-      else document.body.classList.add('euforie-native-open');
+      else { document.body.dataset.euforieNeedFallback='1'; document.body.classList.add('euforie-native-open'); }
       closeMobile();
     });
     var logout = add('button', 'euforie-link euforie-action euforie-logout', '↪  Wyloguj', sidebar);
@@ -109,54 +109,54 @@
     });
   }
   function getHeader() {
-    var logo = app.querySelector('#logo');
+    if (!app) return null;
+    // Pterodactyl 1.x: the #logo lives inside NavigationBar. It is the
+    // reliable marker, not the presence of account/search actions.
+    var logo=app.querySelector('#logo');
     if (!logo) return null;
-    var candidate = logo;
-    for (var i = 0; i < 5 && candidate && candidate !== app; i++, candidate = candidate.parentElement) {
-      if (candidate.querySelector('a[href="/account"]') &&
-          candidate.querySelector('a[href="/"]')) return candidate.closest('div.bg-neutral-900') || candidate;
+    var header=logo.closest('div.bg-neutral-900');
+    if (header && header.querySelector('a[href="/"]')) return header;
+    var p=logo;
+    for (var i=0;i<5&&p&&p!==app;i++,p=p.parentElement) {
+      if (p.querySelector('a[href="/"]') && p.querySelector('a[href="/account"]')) return p;
     }
-    // The logo may exist before the account action is mounted; do not hide.
     return null;
   }
   function getLogoutButton(header) {
     if (!header) return null;
-    var accountLink = header.querySelector('a[href="/account"]');
-    var nav = accountLink && accountLink.parentElement;
-    if (!nav) return null;
-    return Array.prototype.find.call(nav.children, function (el) {
-      return el.tagName === 'BUTTON';
-    }) || null;
-  }
-  function getAccountNav() {
-    if (!location.pathname.startsWith('/account')) return null;
-    var links = Array.prototype.slice.call(app.querySelectorAll('a[href]')).filter(function (el) {
-      return ['/account/api','/account/ssh','/account/activity'].includes(el.getAttribute('href'));
-    });
-    if (links.length < 2) return null;
-    var parent=links[0].parentElement;
-    if (parent && links.every(function (el) {return parent.contains(el)})) return parent;
-    return null;
-  }
-  function getServerNav(id) {
-    if (!id) return null;
-    var candidates = Array.prototype.slice.call(app.querySelectorAll('a[href]')).filter(function (a) {
-      try {
-        var pathname = new URL(a.getAttribute('href'), location.origin).pathname;
-        return pathname.indexOf('/server/' + id + '/') === 0 &&
-          /\/(files|databases|schedules|users|backups|network|startup|settings|activity)$/.test(pathname);
-      } catch (_) { return false; }
-    });
-    if (candidates.length < 2) return null;
-    var first = candidates[0];
-    var holder = first.parentElement;
-    for (var i = 0; i < 4 && holder && holder !== app; i++, holder = holder.parentElement) {
-      if (candidates.every(function (a) { return holder.contains(a); }) &&
-          holder.querySelectorAll('a[href]').length <= 20) {
-        return holder;
-      }
+    // React's navigation <button> is a sibling of /account, not a child.
+    var account=header.querySelector('a[href="/account"]');
+    if (!account) return null;
+    var group=account.parentElement;
+    for(var depth=0;depth<3&&group&&group!==header;depth++,group=group.parentElement){
+      var buttons=Array.from(group.querySelectorAll('button')).filter(function(el) {
+        return !el.closest('.navigation-link');
+      });
+      if (buttons.length===1) return buttons[0];
     }
     return null;
+  }
+  function getNativeSubnav() {
+    if (!app) return null;
+    var id=getServerId();
+    var prefix=id?'/server/'+id+'/':'/account/';
+    var tails=id?['files','databases','schedules','users','backups','network','startup','settings','activity']:['api','ssh','activity'];
+    var matching=Array.from(app.querySelectorAll('a[href]')).filter(function(a){
+      try {
+        var url=new URL(a.getAttribute('href'),location.origin).pathname;
+        if(!url.startsWith(prefix)) return false;
+        return tails.includes(url.slice(prefix.length));
+      } catch (_) { return false; }
+    });
+    if(matching.length<2) return null;
+    // Real Pterodactyl layout: <SubNavigation> <div> <a/> ... </div> </SubNavigation>
+    // Return the OUTER styled SubNavigation wrapper, otherwise the gray bar remains.
+    var inner=matching[0].parentElement;
+    if (!inner || !matching.every(function(a){return inner.contains(a)})) return null;
+    var outer=inner.parentElement;
+    if (!outer || outer===app || outer.contains(app.querySelector('#logo'))) return null;
+    if(outer.querySelectorAll('a[href]').length>22) return null;
+    return outer;
   }
   function refresh() {
     refreshPending = false;
@@ -176,6 +176,8 @@
     var oldHeader = app.querySelector('[data-euforie-native-header]');
     if (oldHeader && oldHeader !== header) oldHeader.removeAttribute('data-euforie-native-header');
     var canProxy = !!(header && header.querySelector('.navigation-link') && getLogoutButton(header));
+    // If the native controls are not ready yet, leave their toolbar visible.
+    // On the next React insertion MutationObserver will retry.
     if (header && canProxy) header.setAttribute('data-euforie-native-header','yes');
     else if (header) header.removeAttribute('data-euforie-native-header');
 
@@ -183,7 +185,7 @@
     // Never offer privileged navigation to users lacking the native admin link.
     if (admin) admin.hidden = !(header && header.querySelector('a[href="/admin"]'));
 
-    var nativeSubnav = id ? getServerNav(id) : getAccountNav();
+    var nativeSubnav = getNativeSubnav();
     var prevNav = app.querySelector('[data-euforie-native-subnav]');
     if (prevNav && prevNav !== nativeSubnav) prevNav.removeAttribute('data-euforie-native-subnav');
 
@@ -226,7 +228,11 @@
       nativeSubnav.setAttribute('data-euforie-native-subnav','yes');
     }
     // A missing native action must never leave users locked out of their panel.
-    if (!canProxy) document.body.classList.add('euforie-native-open');
+    if (!canProxy) { document.body.dataset.euforieNeedFallback='1'; document.body.classList.add('euforie-native-open'); }
+    else if(document.body.dataset.euforieNeedFallback==='1') {
+      document.body.classList.remove('euforie-native-open');
+      delete document.body.dataset.euforieNeedFallback;
+    }
     document.documentElement.dataset.euforieVersion = VERSION;
     window.__euforieStatus = {
       version: VERSION,
@@ -234,6 +240,7 @@
       originalTopBarDetected: !!header,
       nativeActionsReady: canProxy,
       originalServerTabsDetected: !!nativeSubnav,
+      hiddenUpperMenu: canProxy && !!nativeSubnav && !document.body.classList.contains('euforie-native-open'),
       path: path
     };
   }
@@ -244,7 +251,12 @@
   }
   function init() {
     app = document.getElementById('app');
-    if (!app) return;
+    if (!app) {
+      // Works even if JS executes before Laravel/React has mounted #app.
+      var wait=new MutationObserver(function(){app=document.getElementById('app');if(app){wait.disconnect();init();}});
+      wait.observe(document.documentElement,{childList:true,subtree:true});
+      return;
+    }
     build();
     schedule();
     // Observe only React child insertions/removals. Theme changes outside
