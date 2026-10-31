@@ -1,3 +1,19 @@
+# EUFORIE — aktualizacja awaryjna 2.4.0
+
+**Priorytet: przywrócenie klikania.** Wersja 2.4 usuwa niestabilny JavaScript, który dodawał boczne menu, ukrywał nawigację i obserwował zmiany DOM. Przywrócone są natywne, działające menu i zakładki Pterodactyla. Motyw zachowuje czarno-fioletowe CSS i napis EUFORIE. Górny pasek jest tymczasowo widoczny, bo zawiera oryginalne działające przyciski.
+
+**Aktualizacja na VPS z działającym Pterodactyle 1.x:**
+
+```bash
+sudo bash themes/drakoria-purple/full/v1/aktualizuj.sh /var/www/pterodactyl
+```
+
+Skrypt tworzy backup, weryfikuje podmienione zasoby i ustawia wersję `?v=2.4.0` dla przeglądarki. Po aktualizacji wykonaj pełne przeładowanie i, jeśli potrzeba, wyczyść cache witryny. W przeglądarce w konsoli JavaScript powinno być `[EUFORIE] Stabilny motyw 2.4.0`.
+
+Poniższy opis wersji 2.1–2.3 jest historyczny i **nie** opisuje układu 2.4.0.
+
+---
+
 # EUFORIE Purple — polski motyw Pterodactyl 1.x
 
 Prawdziwe pliki GUI: CSS, JavaScript, SVG, instalator, aktualizator, cofanie i statyczny podgląd. To nakładka na oryginalny frontend Pterodactyl, dlatego przyciski sterowania, pliki, konsola i inne operacje pozostają obsługiwane przez panel oraz jego uprawnienia.
