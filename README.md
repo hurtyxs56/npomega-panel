@@ -1,3 +1,12 @@
+**DragonFire LIVE 1.2 — odnowiona konsola, menu boczne, CPU/RAM i wykresy:**
+
+```bash
+cd /root/npomega-panel
+git pull --ff-only
+python3 themes/dragonfire-live/upgrade.py --dry-run
+python3 themes/dragonfire-live/upgrade.py
+```
+
 # 🔥 DragonFire LIVE — działający motyw Pterodactyl (czarny/czerwony/ogień)
 
 **[INSTALACJA NA MATHOST — KOMENDY I COFANIE](themes/dragonfire-live/README.md)** · [Kod motywu](themes/dragonfire-live)
