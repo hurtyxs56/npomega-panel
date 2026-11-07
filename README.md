@@ -1,3 +1,9 @@
+## 🔥 DragonFire — nowy podgląd czerwono-czarnego GUI
+
+Nowy projekt **DragonFire** (czarny, czerwony i ognisty pomarańcz) jest w [themes/dragonfire-preview](themes/dragonfire-preview). [Otwórz plik HTML](themes/dragonfire-preview/index.html) lub przeczytaj [komendy do pobrania i podglądu](themes/dragonfire-preview/README.md). **To prototyp, nie gotowy instalator Pterodactyl.**
+
+---
+
 # EUFORIE — czarno-fioletowy GUI Pterodactyl
 
 Nowy motyw **EUFORIE Purple PL** jest w [themes/drakoria-purple/full](themes/drakoria-purple/full). Zachowaliśmy dawną nazwę katalogu dla zgodności starych linków. Aktualizacja już zainstalowanego GUI: `sudo bash themes/drakoria-purple/full/v1/aktualizuj.sh /var/www/pterodactyl`.
