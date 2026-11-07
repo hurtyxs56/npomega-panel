@@ -1,5 +1,26 @@
 # DragonFire LIVE 🔥 — stały motyw Pterodactyl
 
+## 🔥 DragonFire LIVE 1.2 — nowa konsola i poprawione ładowanie menu
+
+**Na VPS Mathost, gdzie działa WWW Pterodactyl, jako root:**
+
+```bash
+cd /root/npomega-panel
+git pull --ff-only
+python3 themes/dragonfire-live/upgrade.py --dry-run
+python3 themes/dragonfire-live/upgrade.py
+```
+
+Po komunikacie sukcesu naciśnij w przeglądarce `Ctrl+Shift+R`.
+
+Zmiany w 1.2: nowy wygląd natywnej konsoli xterm (czarny terminal i czerwone obramowanie), pole wpisywania komend, oryginalne przyciski zasilania, karty zasobów i wykresy Chart.js; poprawiono też wczytywanie menu z `<head>` przez skrypt `defer` (zamiast w końcu `<body>`). Żadne komendy nie są przechwytywane. Wszystko nadal łączy się z prawdziwym Pterodactyle.
+
+Aktualizator obsługuje już zainstalowane wersje 1.0 i 1.1. Sprawdza hash plików przed podmianą, zapisuje kopię, ma rollback w razie błędu. Cofnięcie do motywu sprzed DragonFire: `python3 themes/dragonfire-live/install.py uninstall`.
+
+**Diagnostyka, jeśli sidebar nadal nie działa:** w konsoli przeglądarki (F12) wykonaj `window.__dragonfireLiveStatus` i `document.querySelector('script[src*="dragonfire-live"]')?.src`. Sprawdź w Network czy `gui.js?v=1.2.0` ma status 200. Jeśli skrypt nie dotarł, pokaż wynik; nie wykonuj dodatkowych instalacji na ślepo.
+
+---
+
 ## 🔥 Naprawa interfejsu na Mathost — aktualizacja DragonFire LIVE 1.1.0
 
 **Jeżeli DragonFire jest już zainstalowany** (ale sidebar nie działa lub widzisz stare szare kafelki), nie wykonuj ponownie `install`. Zaloguj się jako root na VPS z panelem WWW i wpisz po kolei:
