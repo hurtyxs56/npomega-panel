@@ -6,6 +6,14 @@
 cd /root/npomega-panel && git pull --ff-only && python3 themes/dragonfire-live/install.py install --dry-run && python3 themes/dragonfire-live/install.py install
 ```
 
+**Naprawa istniejącej instalacji DragonFire 1.0.0 na Mathost:**
+
+```bash
+cd /root/npomega-panel
+git pull --ff-only
+python3 themes/dragonfire-live/upgrade.py
+```
+
 **To instalacja w prawdziwym panelu** (na VPS z panelem WWW, zwykle `/var/www/pterodactyl`). Zachowuje natywne funkcje Pterodactyla. Poprzedni podgląd HTML nie instaluje się na panelu.
 
 ---
