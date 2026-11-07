@@ -1,12 +1,12 @@
-/* DRAGONFIRE 3.0.0 — safe sidebar for Pterodactyl v1.x.
+/* DRAGONFIRE LIVE 1.1.0 — sidebar using native Pterodactyl links.
  * Does not replace React components, rewrite text nodes, hijack forms,
  * or create a full-screen overlay. Native controls remain available.
  */
 (function () {
   'use strict';
-  if (window.__euforieV3) return;
-  window.__euforieV3 = true;
-  var VERSION = '1.0.0';
+  if (window.__dragonfireLiveV110) return;
+  window.__dragonfireLiveV110 = true;
+  var VERSION = '1.1.0';
   var app = null;
 
   var links = [
@@ -42,66 +42,66 @@
     return !/^\/(?:auth|admin)(?:\/|$)/.test(window.location.pathname);
   }
   function closeMobile() {
-    document.body.classList.remove('euforie-menu-open');
+    document.body.classList.remove('dragonfire-menu-open');
     if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
   }
   function build() {
     if (sidebar) return;
-    sidebar = add('aside', 'euforie-sidebar', '', document.body);
+    sidebar = add('aside', 'dragonfire-sidebar', '', document.body);
     sidebar.setAttribute('aria-label', 'DRAGONFIRE — nawigacja');
-    var brand = add('a', 'euforie-brand', '🔥 DRAGONFIRE', sidebar);
+    var brand = add('a', 'dragonfire-brand', '🔥 DRAGONFIRE', sidebar);
     brand.href = '/';
-    add('span', 'euforie-subtitle', 'SMOCZY PANEL SERWERÓW', sidebar);
-    add('div', 'euforie-section-label', 'GŁÓWNE', sidebar);
-    var home = add('a', 'euforie-link euforie-home', '⌂  Panel główny', sidebar);
+    add('span', 'dragonfire-subtitle', 'SMOCZY PANEL SERWERÓW', sidebar);
+    add('div', 'dragonfire-section-label', 'GŁÓWNE', sidebar);
+    var home = add('a', 'dragonfire-link dragonfire-home', '⌂  Panel główny', sidebar);
     home.href = '/';
-    add('div', 'euforie-section-label', 'SERWER', sidebar);
-    serverList = add('nav', 'euforie-links', '', sidebar);
+    add('div', 'dragonfire-section-label', 'SERWER', sidebar);
+    serverList = add('nav', 'dragonfire-links', '', sidebar);
     serverList.setAttribute('aria-label', 'Opcje wybranego serwera');
-    add('div', 'euforie-section-label', 'KONTO', sidebar);
-    var account = add('a', 'euforie-link', '⚙  Moje konto', sidebar);
+    add('div', 'dragonfire-section-label', 'KONTO', sidebar);
+    var account = add('a', 'dragonfire-link', '⚙  Moje konto', sidebar);
     account.href = '/account';
-    var admin = add('a', 'euforie-link euforie-admin', '♜  Administracja', sidebar);
+    var admin = add('a', 'dragonfire-link dragonfire-admin', '♜  Administracja', sidebar);
     admin.href = '/admin';
     admin.hidden = true;
-    var api = add('a', 'euforie-link', '◈  Klucze API', sidebar);
+    var api = add('a', 'dragonfire-link', '◈  Klucze API', sidebar);
     api.href = '/account/api';
-    var ssh = add('a', 'euforie-link', '⌁  Klucze SSH', sidebar);
+    var ssh = add('a', 'dragonfire-link', '⌁  Klucze SSH', sidebar);
     ssh.href = '/account/ssh';
-    var activity = add('a', 'euforie-link', '◷  Aktywność konta', sidebar);
+    var activity = add('a', 'dragonfire-link', '◷  Aktywność konta', sidebar);
     activity.href = '/account/activity';
-    var search = add('button', 'euforie-link euforie-action euforie-search', '⌕  Wyszukaj serwer', sidebar);
+    var search = add('button', 'dragonfire-link dragonfire-action dragonfire-search', '⌕  Wyszukaj serwer', sidebar);
     search.type = 'button';
     search.addEventListener('click', function () {
       var header = getHeader();
       var original = header && header.querySelector('.navigation-link');
       if (original) original.click();
-      else { document.body.dataset.euforieNeedFallback='1'; document.body.classList.add('euforie-native-open'); }
+      else { document.body.dataset.dragonfireNeedFallback='1'; document.body.classList.add('dragonfire-native-open'); }
       closeMobile();
     });
-    var logout = add('button', 'euforie-link euforie-action euforie-logout', '↪  Wyloguj', sidebar);
+    var logout = add('button', 'dragonfire-link dragonfire-action dragonfire-logout', '↪  Wyloguj', sidebar);
     logout.type = 'button';
     logout.addEventListener('click', function () {
       var original = getLogoutButton(getHeader());
       if (original) original.click();
-      else document.body.classList.add('euforie-native-open');
+      else document.body.classList.add('dragonfire-native-open');
       closeMobile();
     });
-    var reveal = add('button', 'euforie-link euforie-action euforie-emergency', '☷  Przywróć pasek awaryjnie', sidebar);
+    var reveal = add('button', 'dragonfire-link dragonfire-action dragonfire-emergency', '☷  Przywróć pasek awaryjnie', sidebar);
     reveal.type = 'button';
     reveal.addEventListener('click', function () {
-      document.body.classList.toggle('euforie-native-open');
-      reveal.setAttribute('aria-expanded', String(document.body.classList.contains('euforie-native-open')));
+      document.body.classList.toggle('dragonfire-native-open');
+      reveal.setAttribute('aria-expanded', String(document.body.classList.contains('dragonfire-native-open')));
       closeMobile();
     });
-    var footer = add('div', 'euforie-footer', 'DRAGONFIRE · SMOCZY OGIEŃ · v' + VERSION, sidebar);
+    var footer = add('div', 'dragonfire-footer', 'DRAGONFIRE · SMOCZY OGIEŃ · v' + VERSION, sidebar);
     footer.setAttribute('aria-live', 'off');
-    mobileToggle = add('button', 'euforie-mobile-toggle', '☰  Menu', document.body);
+    mobileToggle = add('button', 'dragonfire-mobile-toggle', '☰  Menu', document.body);
     mobileToggle.type = 'button';
     mobileToggle.setAttribute('aria-label', 'Pokaż lub ukryj menu DRAGONFIRE');
     mobileToggle.setAttribute('aria-expanded', 'false');
     mobileToggle.addEventListener('click', function () {
-      var open = document.body.classList.toggle('euforie-menu-open');
+      var open = document.body.classList.toggle('dragonfire-menu-open');
       mobileToggle.setAttribute('aria-expanded', String(open));
     });
     sidebar.addEventListener('click', function (event) {
@@ -161,33 +161,33 @@
   function refresh() {
     refreshPending = false;
     if (!sidebar || !isClient()) {
-      document.body.classList.remove('euforie-ready','euforie-native-open','euforie-menu-open');
+      document.body.classList.remove('dragonfire-ready','dragonfire-native-open','dragonfire-menu-open');
       return;
     }
-    document.body.classList.add('euforie-ready');
+    document.body.classList.add('dragonfire-ready');
     var id = getServerId();
     var path = window.location.pathname;
-    var home = sidebar.querySelector('.euforie-home');
+    var home = sidebar.querySelector('.dragonfire-home');
     if (home) home.classList.toggle('active', path === '/');
-    sidebar.querySelectorAll('a.euforie-link[href^="/account"]').forEach(function (link) {
+    sidebar.querySelectorAll('a.dragonfire-link[href^="/account"]').forEach(function (link) {
       link.classList.toggle('active',path === link.getAttribute('href'));
     });
     var header = getHeader();
-    var oldHeader = app.querySelector('[data-euforie-native-header]');
-    if (oldHeader && oldHeader !== header) oldHeader.removeAttribute('data-euforie-native-header');
+    var oldHeader = app.querySelector('[data-dragonfire-native-header]');
+    if (oldHeader && oldHeader !== header) oldHeader.removeAttribute('data-dragonfire-native-header');
     var canProxy = !!(header && header.querySelector('.navigation-link') && getLogoutButton(header));
     // If the native controls are not ready yet, leave their toolbar visible.
     // On the next React insertion MutationObserver will retry.
-    if (header && canProxy) header.setAttribute('data-euforie-native-header','yes');
-    else if (header) header.removeAttribute('data-euforie-native-header');
+    if (header && canProxy) header.setAttribute('data-dragonfire-native-header','yes');
+    else if (header) header.removeAttribute('data-dragonfire-native-header');
 
-    var admin = sidebar.querySelector('.euforie-admin');
+    var admin = sidebar.querySelector('.dragonfire-admin');
     // Never offer privileged navigation to users lacking the native admin link.
     if (admin) admin.hidden = !(header && header.querySelector('a[href="/admin"]'));
 
     var nativeSubnav = getNativeSubnav();
-    var prevNav = app.querySelector('[data-euforie-native-subnav]');
-    if (prevNav && prevNav !== nativeSubnav) prevNav.removeAttribute('data-euforie-native-subnav');
+    var prevNav = app.querySelector('[data-dragonfire-native-subnav]');
+    if (prevNav && prevNav !== nativeSubnav) prevNav.removeAttribute('data-dragonfire-native-subnav');
 
     // Rebuild our links from actual native routes. These remain ordinary
     // browser links and never intercept server start/stop buttons.
@@ -196,7 +196,7 @@
       lastPath = listKey;
       serverList.replaceChildren();
       if (!id) {
-        add('span','euforie-hint','Wybierz serwer z listy.',serverList);
+        add('span','dragonfire-hint','Wybierz serwer z listy.',serverList);
       } else {
         var available = new Set();
         if (nativeSubnav) {
@@ -208,7 +208,7 @@
           var target = '/server/' + id + item[1];
           // If native submenu exists, honour its actual permission-filtered links.
           if (nativeSubnav && item[1] && !available.has(target)) return;
-          var a = add('a','euforie-link', item[2] + '  ' + item[0],serverList);
+          var a = add('a','dragonfire-link', item[2] + '  ' + item[0],serverList);
           a.href = target;
           a.classList.toggle('active',path === target || (item[1] && path.indexOf(target + '/') === 0));
         });
@@ -216,7 +216,7 @@
         if (nativeSubnav) {
           var editLink = nativeSubnav.querySelector('a[href^="/admin/servers/view/"]');
           if (editLink) {
-            var edit = add('a','euforie-link','♜  Edytuj serwer (admin)',serverList);
+            var edit = add('a','dragonfire-link','♜  Edytuj serwer (admin)',serverList);
             edit.href = editLink.getAttribute('href');
           }
         }
@@ -225,22 +225,22 @@
     // Keep the server's original navigation available unless we have working
     // links rendered in the sidebar. The "Oryginalne menu" button restores it.
     if (nativeSubnav && ((id && serverList.querySelector('a[href]')) || path.startsWith('/account'))) {
-      nativeSubnav.setAttribute('data-euforie-native-subnav','yes');
+      nativeSubnav.setAttribute('data-dragonfire-native-subnav','yes');
     }
     // A missing native action must never leave users locked out of their panel.
-    if (!canProxy) { document.body.dataset.euforieNeedFallback='1'; document.body.classList.add('euforie-native-open'); }
-    else if(document.body.dataset.euforieNeedFallback==='1') {
-      document.body.classList.remove('euforie-native-open');
-      delete document.body.dataset.euforieNeedFallback;
+    if (!canProxy) { document.body.dataset.dragonfireNeedFallback='1'; document.body.classList.add('dragonfire-native-open'); }
+    else if(document.body.dataset.dragonfireNeedFallback==='1') {
+      document.body.classList.remove('dragonfire-native-open');
+      delete document.body.dataset.dragonfireNeedFallback;
     }
-    document.documentElement.dataset.euforieVersion = VERSION;
-    window.__euforieStatus = {
+    document.documentElement.dataset.dragonfireLiveVersion = VERSION;
+    window.__dragonfireLiveStatus = {
       version: VERSION,
       ready: true,
       originalTopBarDetected: !!header,
       nativeActionsReady: canProxy,
       originalServerTabsDetected: !!nativeSubnav,
-      hiddenUpperMenu: canProxy && !!nativeSubnav && !document.body.classList.contains('euforie-native-open'),
+      hiddenUpperMenu: canProxy && !!nativeSubnav && !document.body.classList.contains('dragonfire-native-open'),
       path: path
     };
   }
@@ -267,7 +267,7 @@
     document.addEventListener('keydown',function(e) {
       if (e.key === 'Escape') {
         closeMobile();
-        document.body.classList.remove('euforie-native-open');
+        document.body.classList.remove('dragonfire-native-open');
       }
     });
     console.info('[DRAGONFIRE] v' + VERSION + ' — sidebar bez warstwy blokującej kliknięcia');
