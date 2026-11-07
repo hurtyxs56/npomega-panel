@@ -1,0 +1,330 @@
+/* DragonFire live GUI — adapted from existing functional EUFORIE sidebar CSS, no purple theme. */
+/* DRAGONFIRE DragonFire 1.0.0 — stabilne CSS bez blokowania interakcji.
+   Brak fullscreen overlay, fixed sidebar, display:none dla nawigacji,
+   transformowania aplikacji i modyfikacji pointer-events. */
+:root {
+  --euforie-bg: #090909;
+  --euforie-surface: #171112;
+  --euforie-surface2: #261719;
+  --euforie-accent: #e63d2e;
+  --euforie-hover: #ff7a36;
+  --euforie-border: #4b2923;
+  --euforie-text: #fff4ec;
+}
+html { color-scheme: dark; background-color: #090909; }
+body:has(#app) {
+  color: var(--euforie-text) !important;
+  background: radial-gradient(ellipse at 85% 4%,#3a1614 0%,transparent 45%),#090909!important;
+  min-height:100vh;
+  font-family: Inter,"Segoe UI",system-ui,sans-serif!important;
+}
+body:has(#app) #app {
+  background:transparent;
+  color:var(--euforie-text);
+}
+/* Zachowujemy natywne menu: wszystkie odnośniki React działają normalnie. */
+body:has(#app) #logo a {
+  font-size:0!important;
+  color:#fff5ed!important;
+  text-decoration:none!important;
+}
+body:has(#app) #logo a::after {
+  content:"DRAGONFIRE";
+  display:inline;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:.075em;
+  color:#ffe7d5;
+  text-shadow:0 0 16px #e63d2e7a;
+}
+body:has(#app) [class*="bg-neutral-900"],
+body:has(#app) [class*="bg-gray-900"] {
+  background:#150e0e!important;
+}
+body:has(#app) [class*="bg-neutral-800"],
+body:has(#app) [class*="bg-gray-800"] {
+  background:#1b1212!important;
+}
+body:has(#app) [class*="bg-neutral-700"],
+body:has(#app) [class*="bg-gray-700"] {
+  background:#2b1718!important;
+}
+body:has(#app) [class*="border-neutral-"],
+body:has(#app) [class*="border-gray-"] {
+  border-color:#60302a!important;
+}
+body:has(#app) [class*="bg-cyan-"],
+body:has(#app) [class*="bg-blue-"] {
+  background-color:#ae221e!important;
+}
+body:has(#app) [class*="text-cyan-"],
+body:has(#app) [class*="text-blue-"] {
+  color:#ffb16e!important;
+}
+body:has(#app) [class*="text-neutral-400"],
+body:has(#app) [class*="text-neutral-500"]{
+  color:#d5b5a7!important;
+}
+body:has(#app) [class*="text-neutral-100"],
+body:has(#app) [class*="text-neutral-200"]{
+  color:#fff1e6!important;
+}
+body:has(#app) h1,body:has(#app) h2,body:has(#app) h3{
+  color:#fff1e6!important;
+  letter-spacing:-.015em;
+}
+body:has(#app) a:hover{ color:#ffbb82; }
+body:has(#app) :is(button,input,a,select,textarea):focus-visible{
+  outline:2px solid #ff8a47;
+  outline-offset:2px;
+}
+body:has(#app) input:not([type="checkbox"]),
+body:has(#app) textarea,
+body:has(#app) select{
+  border-color:#5a3029!important;
+  color:#fff1e8;
+}
+body:has(#app) button:not(:disabled):hover{
+  filter:brightness(1.08);
+}
+body:has(#app) button[class*="bg-red-"] {
+  background:#b82821!important;
+}
+body:has(#app) .xterm,body:has(#app) .xterm-viewport{
+  background-color:#0e0d0d!important;
+}
+body:has(#app) .xterm{
+  border:1px solid #522923;
+  border-radius:9px;
+}
+body:has(#app) ::selection{
+  background:#bb321e;color:white;
+}
+@media(max-width:640px){
+  body:has(#app) #logo a::after{font-size:18px}
+  body:has(#app) h1{letter-spacing:0}
+}
+
+
+/* DRAGONFIRE 3.0: boczna nawigacja bez pelnoekranowych nakladek. */
+:root{--euforie-sidebar-width:246px}
+body.euforie-ready{
+  background:
+   radial-gradient(ellipse 70% 38% at 88% 0%,rgba(239,54,24,.15),transparent 70%),
+   linear-gradient(150deg,#090909,#170c0b 58%,#0a0909)!important;
+}
+body.euforie-ready #app{
+  margin-left:var(--euforie-sidebar-width)!important;
+  width:calc(100% - var(--euforie-sidebar-width))!important;
+  min-height:100vh;
+  position:relative;
+}
+body.euforie-ready #app [data-euforie-native-header="yes"],
+body.euforie-ready #app [data-euforie-native-subnav="yes"]{
+  display:none!important;
+}
+body.euforie-ready.euforie-native-open #app [data-euforie-native-header="yes"],
+body.euforie-ready.euforie-native-open #app [data-euforie-native-subnav="yes"]{
+  display:block!important;
+}
+body.euforie-ready .euforie-sidebar{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:var(--euforie-sidebar-width);
+  box-sizing:border-box;
+  z-index:24;
+  display:flex;
+  flex-direction:column;
+  padding:23px 13px 18px;
+  overflow-y:auto;
+  background:linear-gradient(165deg,#1f0e0b,#100b0a 47%,#210f0b 100%);
+  border-right:1px solid #693026;
+  box-shadow:7px 0 35px rgba(0,0,0,.22);
+  scrollbar-width:thin;
+  scrollbar-color:#804737 transparent;
+}
+.euforie-sidebar{display:none}
+.euforie-sidebar a,.euforie-sidebar button{
+  text-decoration:none;
+  cursor:pointer;
+}
+.euforie-brand{
+  display:block;
+  padding:9px 12px 3px;
+  font-size:23px;
+  letter-spacing:.045em;
+  font-weight:900;
+  color:#fff0e4;
+  text-shadow:0 0 18px #f04c1b80;
+}
+.euforie-brand:hover{color:white}
+.euforie-subtitle{
+  font-size:10px;
+  letter-spacing:.21em;
+  color:#da9f7d;
+  padding:0 12px 20px;
+  border-bottom:1px solid #532820;
+  font-weight:700;
+}
+.euforie-section-label{
+  padding:19px 11px 8px;
+  color:#b98770;
+  font-size:10px;
+  letter-spacing:.16em;
+  font-weight:800;
+}
+.euforie-links{display:flex;flex-direction:column}
+.euforie-link{
+  width:100%;
+  display:block;
+  box-sizing:border-box;
+  color:#e8c6b3;
+  padding:10px 12px;
+  font:600 13px Inter,"Segoe UI",system-ui,sans-serif;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:10px;
+  text-align:left;
+  margin:2px 0;
+  transition:color .12s,background .12s;
+}
+.euforie-link:hover{
+  background:#39201a;
+  border-color:#6b3429;
+  color:white!important;
+}
+.euforie-link.active{
+  color:white;
+  border-color:#b33821;
+  background:linear-gradient(100deg,#b92d2288,#2b1411);
+  box-shadow:inset 3px 0 #ff5a2e;
+}
+.euforie-link[hidden]{display:none!important}
+.euforie-link:focus-visible,
+.euforie-mobile-toggle:focus-visible,
+.euforie-brand:focus-visible{
+  outline:2px solid #ffad6d;
+  outline-offset:2px;
+}
+.euforie-hint{color:#b28b70;font-size:12px;padding:10px 12px}
+.euforie-footer{
+  margin-top:auto;
+  padding:17px 12px 1px;
+  border-top:1px solid #603025;
+  font-size:10px;
+  letter-spacing:.05em;
+  color:#cb9574;
+}
+.euforie-mobile-toggle{
+  display:none;
+  background:#441e17;
+  border:1px solid #bd4a2f;
+  color:#fff0dc;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+@media (max-width:960px){
+  body.euforie-ready #app{
+    margin-left:0!important;
+    width:100%!important;
+    padding-top:48px;
+  }
+  body.euforie-ready .euforie-mobile-toggle{
+    display:block;
+    position:fixed;
+    z-index:35;
+    top:10px;left:12px;
+  }
+  body.euforie-ready .euforie-sidebar{
+    z-index:30;
+    width:min(275px,83vw);
+    transform:translateX(-105%);
+    visibility:hidden;
+    transition:transform .2s ease,visibility .2s;
+    box-shadow:12px 0 30px #0008;
+  }
+  body.euforie-ready.euforie-menu-open .euforie-sidebar{
+    transform:translateX(0);
+    visibility:visible;
+  }
+  body.euforie-ready.euforie-menu-open .euforie-mobile-toggle{left:min(279px,85vw)}
+}
+@media (prefers-reduced-motion:reduce){
+ .euforie-sidebar,.euforie-link{transition:none!important}
+}
+
+/* React modal portaled to #modal-portal must stay above DRAGONFIRE navigation. */
+body #modal-portal{position:relative;z-index:100}
+body.euforie-ready .euforie-emergency{
+  margin-top:5px;
+  font-size:11px;
+  color:#b68c71;
+}
+/* Native toolbar is fully suppressed only after React actions are located. */
+body.euforie-ready #app [data-euforie-native-header="yes"]{display:none!important}
+body.euforie-ready.euforie-native-open #app [data-euforie-native-header="yes"]{
+  display:block!important;
+}
+
+
+/* DRAGONFIRE 3.2 — ukrywaj CALE paski, nie tylko ich linki.
+   Dopiero po udanym wlaczeniu bocznego menu. Przycisk awaryjny odslania oryginal. */
+body.euforie-ready:not(.euforie-native-open) #app div.bg-neutral-900:has(#logo) {
+  display:none!important;
+}
+body.euforie-ready:not(.euforie-native-open) #app div:has(> div > a[href^="/server/"][href$="/files"]) {
+  display:none!important;
+}
+body.euforie-ready:not(.euforie-native-open) #app div:has(> div > a[href="/account/api"]) {
+  display:none!important;
+}
+/* Dla wersji, w ktorych navigacja jest ostylowana przez styled-components. */
+body.euforie-ready:not(.euforie-native-open) #app [data-euforie-native-subnav="yes"],
+body.euforie-ready:not(.euforie-native-open) #app [data-euforie-native-header="yes"]{
+  display:none!important;
+}
+
+
+/* DragonFire 1.0 — ember/dragon accents; native Pterodactyl controls remain untouched. */
+:root{--dragon-bg:#090909;--dragon-red:#d93226;--dragon-fire:#ff8038;--dragon-border:#572e24}
+html, body{background-color:var(--dragon-bg)!important}
+body:has(#app){background:radial-gradient(ellipse 65% 40% at 83% -15%,rgba(230,54,27,.18),transparent 73%),radial-gradient(ellipse 50% 40% at 5% 105%,rgba(240,114,24,.11),transparent 70%),#090909!important}
+body.euforie-ready .euforie-sidebar{
+ background:radial-gradient(ellipse 110% 46% at 50% -11%,#6b2519 0%,transparent 75%),linear-gradient(178deg,#1d0e0d 0%,#100d0d 46%,#190e0b 100%)!important;
+ border-right:1px solid #703124!important;
+ box-shadow:7px 0 34px #0006,inset -1px 0 0 #f367301a!important
+}
+body.euforie-ready .euforie-sidebar::before{
+ content:"";position:relative;display:block;flex:none;height:5px;margin:-23px -13px 15px;
+ background:linear-gradient(90deg,transparent,#f04128 20%,#ff9c45 55%,#d63223 80%,transparent);
+ box-shadow:0 0 21px #ff421f75;pointer-events:none
+}
+body.euforie-ready .euforie-brand{font-size:22px;letter-spacing:.055em;color:#fff1e6!important;text-shadow:0 0 14px #ff562d66!important}
+body.euforie-ready .euforie-brand::before{content:"🐉";font-size:25px;margin-right:10px;vertical-align:-1px}
+body.euforie-ready .euforie-subtitle{color:#e7a17e;letter-spacing:.12em}
+body.euforie-ready .euforie-section-label{color:#b78370}
+body.euforie-ready .euforie-link{color:#e1c9b9;border-radius:10px}
+body.euforie-ready .euforie-link:hover{background:linear-gradient(90deg,#411d18,#251714)!important;border-color:#663126!important}
+body.euforie-ready .euforie-link.active{background:linear-gradient(97deg,#8b271d8c,#351913)!important;border-color:#9c3b27!important;box-shadow:inset 3px 0 #ff7932,0 0 12px #ef3a2014!important}
+body.euforie-ready .euforie-footer{color:#bd8b70}
+body:has(#app) .xterm{border:1px solid #603126!important;box-shadow:0 0 26px #c73e1114;border-radius:12px!important}
+body:has(#app) #app h1,body:has(#app) #app h2{letter-spacing:-.025em;font-weight:750}
+body:has(#app) #app :is(button,input,select,textarea){border-radius:9px}
+body:has(#app) #app a[href^="/server/"]:has(>.status-bar){
+ background:linear-gradient(137deg,#201614,#121011 75%)!important;
+ border:1px solid #563026!important;border-radius:16px!important;box-shadow:0 10px 28px #0004!important;transition:box-shadow .2s,border-color .2s,transform .2s
+}
+body:has(#app) #app a[href^="/server/"]:has(>.status-bar):hover{
+ border-color:#f37335!important;box-shadow:0 11px 31px #b82f1e33!important;transform:translateY(-2px)
+}
+body:has(#app) #app a[href^="/server/"]:has(>.status-bar):focus-visible{outline:2px solid #ff9b4c}
+body:has(#app) #app .bg-neutral-900:has(#logo){background:#140e0e!important}
+body.skin-blue .main-header,body.skin-blue .main-sidebar{background:#150f0e!important}
+body.skin-blue .content-wrapper{background:#0d0b0b!important}
+body.skin-blue .box{background:#1b1413;color:#fff0e7;border-color:#593021}
+body.skin-blue .btn-primary{background:#c73824;border-color:#ef6540}
+body.skin-blue :is(a,.table a){color:#ffae78}
+@media (max-width:960px){body.euforie-ready #app{width:100%!important;max-width:100%!important}}
+@media (prefers-reduced-motion:reduce){body:has(#app) #app a[href^="/server/"]:has(>.status-bar){transition:none!important;transform:none!important}}
