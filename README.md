@@ -1,3 +1,15 @@
+# 🔥 DragonFire LIVE — działający motyw Pterodactyl (czarny/czerwony/ogień)
+
+**[INSTALACJA NA MATHOST — KOMENDY I COFANIE](themes/dragonfire-live/README.md)** · [Kod motywu](themes/dragonfire-live)
+
+```bash
+cd /root/npomega-panel && git pull --ff-only && python3 themes/dragonfire-live/install.py install --dry-run && python3 themes/dragonfire-live/install.py install
+```
+
+**To instalacja w prawdziwym panelu** (na VPS z panelem WWW, zwykle `/var/www/pterodactyl`). Zachowuje natywne funkcje Pterodactyla. Poprzedni podgląd HTML nie instaluje się na panelu.
+
+---
+
 ## 🔥 DragonFire — nowy podgląd czerwono-czarnego GUI
 
 Nowy projekt **DragonFire** (czarny, czerwony i ognisty pomarańcz) jest w [themes/dragonfire-preview](themes/dragonfire-preview). [Otwórz plik HTML](themes/dragonfire-preview/index.html) lub przeczytaj [komendy do pobrania i podglądu](themes/dragonfire-preview/README.md). **To prototyp, nie gotowy instalator Pterodactyl.**
