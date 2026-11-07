@@ -18,7 +18,7 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 ROOT = Path(__file__).resolve().parent
 RELATIVE = [
     "resources/views/templates/wrapper.blade.php",
@@ -34,10 +34,11 @@ MARKERS = [
 ]
 HEAD = """<!-- DRAGONFIRE_HEAD_BEGIN -->
 <style id="dragonfire-preload">html,body{background:#090909!important;color-scheme:dark!important}body{color:#fff1e9}</style>
-<link rel="stylesheet" href="/dragonfire-live/gui.css?v=1.1.0">
+<link rel="stylesheet" href="/dragonfire-live/gui.css?v=1.2.0">
+<script src="/dragonfire-live/gui.js?v=1.2.0" defer></script>
 <!-- DRAGONFIRE_HEAD_END -->"""
 BODY = """<!-- DRAGONFIRE_BODY_BEGIN -->
-<script defer src="/dragonfire-live/gui.js?v=1.1.0"></script>
+<!-- Skrypt DragonFire zaladowany w <head> z defer dla pewniejszego startu. -->
 <!-- DRAGONFIRE_BODY_END -->"""
 
 def digest(data):
