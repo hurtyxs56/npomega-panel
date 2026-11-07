@@ -1,5 +1,26 @@
 # DragonFire LIVE 🔥 — stały motyw Pterodactyl
 
+## 🔥 Naprawa interfejsu na Mathost — aktualizacja DragonFire LIVE 1.1.0
+
+**Jeżeli DragonFire jest już zainstalowany** (ale sidebar nie działa lub widzisz stare szare kafelki), nie wykonuj ponownie `install`. Zaloguj się jako root na VPS z panelem WWW i wpisz po kolei:
+
+```bash
+cd /root/npomega-panel
+git pull --ff-only
+python3 themes/dragonfire-live/upgrade.py --dry-run
+python3 themes/dragonfire-live/upgrade.py
+```
+
+Następnie odśwież stronę panelu skrótem **Ctrl+Shift+R**.
+
+Wersja 1.1.0 usuwa konflikt ze zmienną starego motywu EUFORIE, oddziela klasy CSS/JS nowego sidebaru, poprawia kolory prawdziwych statystyk i wykresów oraz podbija wersję zasobów, aby przeglądarka nie trzymała starego CSS/JS.
+
+Skrypt weryfikuje manifest już zainstalowanej wersji 1.0.0 i kopiuje stare pliki przed podmianą. Jeśli wykryje ręczne zmiany, zatrzyma się bez nadpisywania. Po aktualizacji oryginalna komenda `install.py uninstall` nadal przywraca wygląd sprzed instalacji DragonFire.
+
+Jeśli zobaczysz `DragonFire LIVE 1.1.0 jest juz zainstalowany`, aktualizator nic nie zrobi ponownie.
+
+---
+
 To **prawdziwy motyw dla działającego panelu Pterodactyl**, a nie osobny HTML. Interfejs pozostawia oryginalną aplikację Pterodactyl (logowanie, WebSocket konsoli, pliki, przyciski Start/Stop/Restart, bazy danych, kopie, uprawnienia), zmieniając jej wygląd i nawigację. Boczny pasek opiera się na funkcjonalnym kodzie poprzedniego motywu EUFORIE, ale ma nowy wygląd smoka: czerń, krwista czerwień, pomarańczowy żar.
 
 Motyw tworzy zapasową kopię dotychczasowych szablonów i potrafi przywrócić dokładnie poprzedni wygląd. Nie zmienia Wings, plików Minecrafta, baz danych, kont ani .env.
