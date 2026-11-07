@@ -1,12 +1,12 @@
-/* DRAGONFIRE LIVE 1.1.0 — sidebar using native Pterodactyl links.
+/* DRAGONFIRE LIVE 1.2.0 — sidebar using native Pterodactyl links.
  * Does not replace React components, rewrite text nodes, hijack forms,
  * or create a full-screen overlay. Native controls remain available.
  */
 (function () {
   'use strict';
-  if (window.__dragonfireLiveV110) return;
-  window.__dragonfireLiveV110 = true;
-  var VERSION = '1.1.0';
+  if (window.__dragonfireLiveV120) return;
+  window.__dragonfireLiveV120 = true;
+  var VERSION = '1.2.0';
   var app = null;
 
   var links = [
