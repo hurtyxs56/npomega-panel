@@ -1,5 +1,5 @@
 /* DragonFire live GUI — adapted from existing functional EUFORIE sidebar CSS, no purple theme. */
-/* DRAGONFIRE DragonFire 1.1.0 — stabilne CSS bez blokowania interakcji.
+/* DRAGONFIRE DragonFire 1.2.0 — stabilne CSS bez blokowania interakcji.
    Brak fullscreen overlay, fixed sidebar, display:none dla nawigacji,
    transformowania aplikacji i modyfikacji pointer-events. */
 :root {
@@ -341,4 +341,186 @@ body:has(#app) #logo a{white-space:nowrap}
 @media(max-width:960px){
  body.dragonfire-ready #app{overflow-x:hidden}
  body:has(#app) .bg-gray-600:has(> .bg-gray-700){padding:10px!important}
+}
+
+
+/* =================================================================
+   DRAGONFIRE LIVE 1.2.0 — full console facelift for real Pterodactyl.
+   All controls and websockets are original; CSS only.
+   ================================================================= */
+:root{
+ --df-void:#090807;--df-dark:#100e0d;--df-panel:#1b1412;
+ --df-panel-2:#251a16;--df-stroke:#5c2b21;--df-flame:#ff7b35;
+ --df-red:#dd3328;--df-text:#fff1e6;--df-muted:#ccb5a6
+}
+/* Frame around xterm without changing the terminal's measured height. */
+body:has(#app) #app .xterm{
+ background:#080909!important;
+ border:1px solid #793624!important;
+ border-radius:11px!important;
+ box-shadow:inset 0 0 18px rgba(244,67,35,.075),0 10px 35px #0009,0 0 0 1px #e9441e11!important;
+ padding:10px 8px!important;
+ min-height:0;
+ color:#f8f2eb;
+}
+body:has(#app) #app .xterm .xterm-viewport{
+ background-color:#090909!important;
+ scrollbar-width:thin;
+ scrollbar-color:#873b26 #151110;
+}
+body:has(#app) #app .xterm .xterm-viewport::-webkit-scrollbar-thumb{
+ background:#913c26!important;border-radius:8px!important
+}
+body:has(#app) #app .xterm .xterm-screen{min-width:0}
+body:has(#app) #app .xterm .xterm-selection div{
+ background:rgba(250,121,58,.23)!important;
+}
+/* Terminal container in Pterodactyl css-module: do not rearrange its React DOM. */
+body:has(#app) #app [class*="overflows_container"]:has(.xterm){
+ background:linear-gradient(160deg,#1e1411,#0d0b0b)!important;
+ border:1px solid #6d3323!important;
+ border-radius:15px 15px 0 0!important;
+ padding:8px!important;
+ box-shadow:0 0 0 1px #dd4d1a0a,0 14px 34px #0006!important;
+ box-sizing:border-box;
+ overflow:hidden
+}
+body:has(#app) #app [class*="terminal"]:has(.xterm) {
+ min-width:0;
+ border-radius:15px;
+}
+/* Real command input receives focus; no simulated input, no JS send interception. */
+body:has(#app) #app input[aria-label="Console command input."]{
+ height:50px!important;
+ padding:12px 20px 12px 47px!important;
+ background:linear-gradient(90deg,#1d1614,#120f0e)!important;
+ color:#fff2e6!important;
+ font-family:"Cascadia Code","JetBrains Mono",Consolas,monospace!important;
+ font-size:13px!important;
+ border:1px solid #713525!important;
+ border-top:0!important;
+ border-bottom:2px solid #bc4127!important;
+ border-radius:0 0 12px 12px!important;
+ box-shadow:0 10px 30px #0006!important;
+ outline:none!important;
+ transition:background .18s,border-color .18s,box-shadow .18s;
+ box-sizing:border-box;
+}
+body:has(#app) #app input[aria-label="Console command input."]:focus{
+ border-color:#ff813c!important;
+ border-top-color:transparent!important;
+ border-bottom-color:#ff9c4f!important;
+ background:linear-gradient(90deg,#281814,#17100e)!important;
+ box-shadow:0 0 0 2px #f16d2a1f,0 8px 30px #0007!important;
+}
+body:has(#app) #app input[aria-label="Console command input."]::placeholder{
+ color:#bf9c89!important;opacity:1
+}
+body:has(#app) #app input[aria-label="Console command input."]:disabled{
+ opacity:.55!important;cursor:not-allowed
+}
+body:has(#app) #app [class*="command_icon"]{
+ color:#ff8046!important;pointer-events:none
+}
+/* Stat cards: Pterodactyl uses CSS Modules, not class bg-gray-600 on charts. */
+body:has(#app) #app [class*="stat_block"]{
+ min-height:65px;
+ background:linear-gradient(112deg,#241814,#171210 75%)!important;
+ color:#fff4e9!important;
+ border:1px solid #663022!important;
+ border-left:3px solid #fa6e31!important;
+ border-radius:12px!important;
+ box-shadow:0 7px 25px #0007!important;
+ box-sizing:border-box;
+ transition:border-color .15s,box-shadow .15s
+}
+body:has(#app) #app [class*="stat_block"]:hover{
+ border-color:#b9502c!important;
+ box-shadow:0 7px 25px #0009,0 0 18px #d93f1d25!important
+}
+body:has(#app) #app [class*="stat_block"] [class*="icon"]{
+ background:linear-gradient(145deg,#5c241b,#301c17)!important;
+ color:#ffba82!important;border:1px solid #683b2a!important
+}
+body:has(#app) #app [class*="stat_block"] p{
+ color:#c8a897!important;font-size:12px
+}
+body:has(#app) #app [class*="stat_block"] [class*="status_bar"]{
+ background:#f26633!important
+}
+/* Charts are styled components with hashed chart_container classes. */
+body:has(#app) #app [class*="chart_container"]{
+ background:linear-gradient(160deg,#251815,#130f0e)!important;
+ border:1px solid #6b3022!important;
+ border-bottom:3px solid #f16e30!important;
+ border-radius:14px!important;
+ box-shadow:0 10px 28px #0007!important;
+ overflow:hidden;
+ min-width:0;
+}
+body:has(#app) #app [class*="chart_container"] h3{
+ color:#ffeddc!important;
+ font-weight:750!important;
+ letter-spacing:.03em
+}
+body:has(#app) #app [class*="chart_container"]:hover{
+ border-color:#d05e32!important;
+ box-shadow:0 13px 32px #0008,0 0 18px #b4411a18!important
+}
+body:has(#app) #app [class*="chart_container"] canvas{
+ background:transparent!important;
+ max-width:100%!important
+}
+/* Server headline, real power buttons */
+body:has(#app) #app:has(.xterm) h1{
+ color:#fff1e5!important;
+ text-shadow:0 0 22px #ff5b291f;
+ font-size:clamp(21px,2.2vw,29px)!important;
+ font-weight:850!important;
+ letter-spacing:-.035em!important
+}
+body:has(#app) #app:has(.xterm) button{
+ border-radius:9px!important;
+ min-height:38px;
+ font-weight:700;
+ transition:filter .15s,transform .15s,box-shadow .15s
+}
+body:has(#app) #app:has(.xterm) button:not(:disabled):hover{
+ filter:brightness(1.12);
+ box-shadow:0 5px 18px #ed613426;
+ transform:translateY(-1px)
+}
+body:has(#app) #app:has(.xterm) button:disabled{
+ opacity:.4!important;filter:grayscale(.15);cursor:not-allowed
+}
+body:has(#app) #app:has(.xterm) button[class*="bg-red-"]{
+ background:linear-gradient(110deg,#bc2f28,#e14f32)!important;
+ box-shadow:0 5px 20px #b6292738!important;
+ color:white!important
+}
+body:has(#app) #app:has(.xterm) button[class*="bg-blue-"],
+body:has(#app) #app:has(.xterm) button[class*="bg-cyan-"]{
+ background:linear-gradient(120deg,#b53925,#ec7137)!important;
+ color:white!important
+}
+/* Avoid huge blank desktop gutters on server pages, without changing other views. */
+@media(min-width:1280px){
+ body:has(#app) #app:has(.xterm) > div{
+   max-width:1540px!important;
+ }
+}
+@media(max-width:960px){
+ body:has(#app) #app [class*="stat_block"]{min-height:58px}
+ body:has(#app) #app [class*="chart_container"]{margin-bottom:2px}
+}
+@media(max-width:640px){
+ body:has(#app) #app .xterm{padding:4px!important}
+ body:has(#app) #app [class*="overflows_container"]:has(.xterm){padding:4px!important}
+ body:has(#app) #app input[aria-label="Console command input."]{font-size:12px!important;min-width:0}
+ body:has(#app) #app:has(.xterm) button{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+ body:has(#app) #app button,body:has(#app) #app [class*="stat_block"]{
+  transition:none!important;transform:none!important
+ }
 }
