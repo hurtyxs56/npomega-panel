@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Safe in-place upgrade for an already installed DragonFire LIVE 1.0.0.
+"""Safe in-place upgrade for an already installed DragonFire LIVE 1.0.0 or 1.1.0.
 
 Preserves initial rollback manifest and original Blade backups. Does not
 reinstall Pterodactyl, restart Wings, or modify any game server.
@@ -7,20 +7,22 @@ reinstall Pterodactyl, restart Wings, or modify any game server.
 import argparse
 from datetime import datetime, timezone
 import json
+import re
 import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
 
-from install import validate, write_atomic, clear_views, digest, RELATIVE, ASSETS, ROOT, STATE
+from install import validate, write_atomic, clear_views, digest, RELATIVE, ASSETS, ROOT, STATE, HEAD, BODY
 
-TARGET = "1.1.0"
-OLD = "1.0.0"
+TARGET = "1.2.0"
+SUPPORTED = ("1.0.0", "1.1.0", "1.2.0")
 ASSET_DIR = "public/dragonfire-live"
-OLD_URLS = (
-    ("/dragonfire-live/gui.css?v=1.0.0", "/dragonfire-live/gui.css?v=1.1.0"),
-    ("/dragonfire-live/gui.js?v=1.0.0", "/dragonfire-live/gui.js?v=1.1.0"),
+# Match explicit DragonFire-owned tags only; preserve all other Blade markup.
+BLOCKS = (
+    ("DRAGONFIRE_HEAD_BEGIN", "DRAGONFIRE_HEAD_END", HEAD),
+    ("DRAGONFIRE_BODY_BEGIN", "DRAGONFIRE_BODY_END", BODY),
 )
 
 def upgrade(panel, dry_run=False):
@@ -31,7 +33,7 @@ def upgrade(panel, dry_run=False):
     state_bytes = statepath.read_bytes()
     state = json.loads(state_bytes)
     version = state.get("version")
-    if version not in (OLD, TARGET):
+    if version not in SUPPORTED:
         raise RuntimeError("Nieznana wersja motywu: " + str(version))
     if set(state.get("installed", {})) != set(RELATIVE):
         raise RuntimeError("Manifest szablonow jest niekompletny.")
@@ -67,22 +69,23 @@ def upgrade(panel, dry_run=False):
     if version == TARGET:
         for name in ASSETS:
             if digest(new_assets[name]) != state["assets"][name]:
-                raise RuntimeError("Zainstalowana wersja 1.1.0 rozni sie od repo. Nie nadpisuje.")
-        print("OK: DragonFire LIVE 1.1.0 jest juz zainstalowany.")
+                raise RuntimeError("Zainstalowana wersja 1.2.0 rozni sie od repo. Nie nadpisuje.")
+        print("OK: DragonFire LIVE 1.2.0 jest juz zainstalowany.")
         return
 
     new_templates = {}
     for name, data in old_templates.items():
         txt = data.decode("utf-8")
-        if txt.count("DRAGONFIRE_HEAD_BEGIN") != 1 or txt.count("DRAGONFIRE_BODY_BEGIN") != 1:
-            raise RuntimeError("Nie znaleziono obu znacznikow DragonFire: " + name)
-        for old, new in OLD_URLS:
-            if txt.count(old) != 1:
-                raise RuntimeError("Nieoczekiwany URL motywu: " + name + ": " + old)
-            txt = txt.replace(old, new, 1)
+        for begin, end, replacement in BLOCKS:
+            if txt.count("<!-- " + begin + " -->") != 1 or txt.count("<!-- " + end + " -->") != 1:
+                raise RuntimeError("Brakuje dokladnie jednego bloku " + begin + ": " + name)
+            pattern = re.escape("<!-- " + begin + " -->") + r".*?" + re.escape("<!-- " + end + " -->")
+            txt, count = re.subn(pattern, lambda match: replacement, txt, count=1, flags=re.S)
+            if count != 1:
+                raise RuntimeError("Nie udalo sie uaktualnic bloku " + begin + ": " + name)
         new_templates[name] = txt.encode("utf-8")
     if dry_run:
-        print("OK: DragonFire 1.0.0 mozna bezpiecznie zaktualizowac do 1.1.0.")
+        print("OK: DragonFire " + version + " mozna zaktualizowac do " + TARGET + ".")
         return
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     backup = Path(tempfile.mkdtemp(prefix="dragonfire-upgrade-" + stamp + "-", dir=panel / "storage/app"))
@@ -105,7 +108,7 @@ def upgrade(panel, dry_run=False):
             write_atomic(panel / name, new_templates[name], old_meta[name])
         clear_views(panel)
         write_atomic(statepath, (json.dumps(new_state, indent=2) + "\n").encode(), statepath.stat())
-        print("SUKCES: DragonFire 1.1.0 aktywny na prawdziwym panelu Pterodactyl.")
+        print("SUKCES: DragonFire " + TARGET + " aktywny na prawdziwym panelu Pterodactyl.")
         print("Zapisano kopie poprzedniej wersji: " + str(backup))
         print("Odswiez strone Ctrl+Shift+R.")
     except BaseException:
@@ -118,11 +121,11 @@ def upgrade(panel, dry_run=False):
             clear_views(panel)
         except Exception:
             pass
-        print("BLAD: przywrocono pliki DragonFire 1.0.0.", file=sys.stderr)
+        print("BLAD: przywrocono poprzednia wersje DragonFire.", file=sys.stderr)
         raise
 
 def main():
-    parser = argparse.ArgumentParser(description="Bezpieczna aktualizacja DragonFire LIVE 1.0.0 -> 1.1.0")
+    parser = argparse.ArgumentParser(description="Bezpieczna aktualizacja DragonFire LIVE 1.0 / 1.1 -> 1.2")
     parser.add_argument("--panel", default="/var/www/pterodactyl")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
