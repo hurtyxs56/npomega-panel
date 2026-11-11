@@ -1,3 +1,24 @@
+## DragonFire LIVE 1.3 — statusy, polski interfejs i animowany ogień
+
+Na VPS-ie z panelem WWW, jako root:
+
+```bash
+cd /root/npomega-panel
+git pull --ff-only
+python3 themes/dragonfire-live/upgrade.py --dry-run
+python3 themes/dragonfire-live/upgrade.py
+```
+
+Po aktualizacji odśwież panel przez **Ctrl+Shift+R**. Aktualizacja obejmuje wszystkie obecne i przyszłe serwery w tym panelu; nie instaluje się jej oddzielnie na węzłach Wings.
+
+- Kafelki serwerów i menu wybranego serwera pokazują: **Włączony**, **Wyłączony**, **Uruchamianie**, **Zatrzymywanie**. Odczyty pochodzą z `/api/client/servers/{id}/resources` przez sesję zalogowanego użytkownika. Odświeżanie co około 5 sekund, maksymalnie 4 równoległe żądania, limit czasu 8 sekund. Błąd daje **Brak odczytu**, nigdy fałszywe „Wyłączony”. Obsługiwane są nowe kafelki i zmiany stron listy.
+- Polski słownik interfejsu obejmuje menu, formularze, logowanie, przyciski, komunikaty i znane etykiety administracji. Nie jest tłumaczeniem dowolnych tekstów z pluginów i backendu. Dane użytkownika, nazwy serwerów, pliki i konsola są chronione przed tłumaczeniem.
+- Animowane płomienie CSS działają w tle, nie przechwytują kliknięć, są uproszczone na telefonie, zatrzymują się w ukrytej karcie i respektują ograniczenie animacji w systemie.
+
+Weryfikacja: testy aktualizacji i cofania oraz testy odczytu API z atrapami. Test przeglądarkowy `tests/dragonfire-browser.cjs` przygotowano, lecz Chromium nie uruchomiło się w środowisku budowania (blokada socket). Wygląd i integracja z prawdziwym panelem wymagają sprawdzenia po instalacji. Nie wykonano wdrożenia na VPS-ie.
+
+---
+
 # DragonFire LIVE 🔥 — stały motyw Pterodactyl
 
 ## 🔥 DragonFire LIVE 1.2 — nowa konsola i poprawione ładowanie menu

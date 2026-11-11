@@ -522,3 +522,38 @@ body:has(#app) #app:has(.xterm) button[class*="bg-cyan-"]{
   transition:none!important;transform:none!important
  }
 }
+
+/* LIVE 1.3: actual server state and decorative fire behind all controls. */
+.dragonfire-status {
+  display:inline-flex; align-items:center; gap:8px; flex-shrink:0;
+  padding:7px 12px; margin:8px; border-radius:999px;
+  background:#211e1e; color:#ddd; border:1px solid currentColor;
+  font-size:12px; font-weight:700; line-height:1.4; white-space:nowrap;
+}
+.dragonfire-status::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+.dragonfire-status[data-state="running"] { color:#79e5a0; background:#10291a; }
+.dragonfire-status[data-state="offline"] { color:#ff9898; background:#32191b; }
+.dragonfire-status[data-state="starting"] { color:#ffd175; background:#332610; }
+.dragonfire-status[data-state="stopping"] { color:#ffac70; background:#352013; }
+.dragonfire-status[hidden] { display:none; }
+.dragonfire-current-status { margin:8px 14px 12px; }
+body { isolation:isolate; }
+.dragonfire-fire { position:fixed; inset:0; overflow:hidden; z-index:-1; pointer-events:none; opacity:.48; }
+.dragonfire-flame {
+  position:absolute; bottom:-150px; left:var(--x); width:18vw; min-width:100px; height:430px;
+  border-radius:50% 15% 45% 45%; transform-origin:50% 100%;
+  background:radial-gradient(ellipse at 50% 90%,#ffcf68 0%,#f56a17 22%,#b71d0b80 47%,transparent 70%);
+  filter:blur(13px); animation:dragonfire-flicker var(--duration) var(--delay) ease-in-out infinite alternate;
+}
+@keyframes dragonfire-flicker {
+  0% { transform:translateY(55px) skewX(-8deg) scale(.85, .8); opacity:.5; }
+  50% { transform:translateY(0) skewX(8deg) scale(1,1.1); opacity:.85; }
+  100% { transform:translateY(20px) skewX(-4deg) scale(.9,1.25); opacity:.65; }
+}
+.dragonfire-fire.paused .dragonfire-flame { animation-play-state:paused; }
+@media(max-width:700px) {
+  .dragonfire-flame { height:290px; }
+  .dragonfire-flame:nth-child(even) { display:none; }
+  #app a:has(>.status-bar) { flex-wrap:wrap; }
+}
+@media(prefers-reduced-motion:reduce) { .dragonfire-flame { animation:none; opacity:.5; } }

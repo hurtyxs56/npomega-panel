@@ -16,8 +16,8 @@ import tempfile
 
 from install import validate, write_atomic, clear_views, digest, RELATIVE, ASSETS, ROOT, STATE, HEAD, BODY
 
-TARGET = "1.2.0"
-SUPPORTED = ("1.0.0", "1.1.0", "1.2.0")
+TARGET = "1.3.0"
+SUPPORTED = ("1.0.0", "1.1.0", "1.2.0", "1.3.0")
 ASSET_DIR = "public/dragonfire-live"
 # Match explicit DragonFire-owned tags only; preserve all other Blade markup.
 BLOCKS = (
@@ -69,8 +69,8 @@ def upgrade(panel, dry_run=False):
     if version == TARGET:
         for name in ASSETS:
             if digest(new_assets[name]) != state["assets"][name]:
-                raise RuntimeError("Zainstalowana wersja 1.2.0 rozni sie od repo. Nie nadpisuje.")
-        print("OK: DragonFire LIVE 1.2.0 jest juz zainstalowany.")
+                raise RuntimeError("Zainstalowana wersja 1.3.0 rozni sie od repo. Nie nadpisuje.")
+        print("OK: DragonFire LIVE 1.3.0 jest juz zainstalowany.")
         return
 
     new_templates = {}
@@ -125,7 +125,7 @@ def upgrade(panel, dry_run=False):
         raise
 
 def main():
-    parser = argparse.ArgumentParser(description="Bezpieczna aktualizacja DragonFire LIVE 1.0 / 1.1 -> 1.2")
+    parser = argparse.ArgumentParser(description="Bezpieczna aktualizacja DragonFire LIVE 1.0 / 1.1 -> 1.3")
     parser.add_argument("--panel", default="/var/www/pterodactyl")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
